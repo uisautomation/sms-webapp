@@ -6,8 +6,5 @@ https://github.com/abrahammartin/django-ucamwebauth/archive/1.4.5.tar.gz#egg=dja
 # For an improved ./manage.py shell experience
 ipython
 
-# So that tests may be run within the container
-tox
-
 # Serving
 gunicorn
