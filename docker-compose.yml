@@ -20,7 +20,6 @@ services:
         target: /app/
         read_only: true
     environment:
-      - PORT=8000
       - DJANGO_SETTINGS_MODULE=smswebapp.settings_developer
       - DJANGO_DB_ENGINE=django.db.backends.postgresql
       - DJANGO_DB_HOST=db
@@ -29,15 +28,17 @@ services:
       - DJANGO_DB_PASSWORD=databasePass
       - DJANGO_EMAIL_HOST=debugsmtp
       - DJANGO_EMAIL_PORT=1025
+    command: ["runserver", "0.0.0.0:8000"]
   tox:
     <<: *devserver
     entrypoint: ["tox"]
+    command: [""]
   migrate:
     <<: *devserver
-    entrypoint: ["./manage.py", "migrate"]
+    command: ["migrate"]
   shell:
     <<: *devserver
-    entrypoint: ["./manage.py", "shell"]
+    command: ["shell"]
   db:
     image: postgres
     environment:
