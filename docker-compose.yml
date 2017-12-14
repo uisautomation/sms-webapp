@@ -29,9 +29,6 @@ services:
       - DJANGO_DB_PASSWORD=databasePass
       - DJANGO_EMAIL_HOST=debugsmtp
       - DJANGO_EMAIL_PORT=1025
-  tox:
-    <<: *devserver
-    entrypoint: ["tox"]
   migrate:
     <<: *devserver
     entrypoint: ["./manage.py", "migrate"]
