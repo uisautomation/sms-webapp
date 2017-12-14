@@ -33,7 +33,7 @@ jobs:
           command: |
             . venv/bin/activate
             pip install coveralls
-            coveralls
+            coveralls debug
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "setup.py" }}
           paths:
