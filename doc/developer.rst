@@ -37,8 +37,7 @@ build only the documentation:
 
     The CircleCI job runs tox configured with a PostgreSQL database to match
     that deployed in production. To replicate this, either run a PostgreSQL
-    instance on the local machine, use the Google Cloud SQL proxy or :any:`run
-    the tests via docker-compose <docker-tox>`.
+    instance on the local machine or use the Google Cloud SQL proxy.
 
 .. _devserver:
 
@@ -109,25 +108,6 @@ can launch such a shell via:
 .. code-block:: bash
 
     $ docker-compose run shell
-
-.. _docker-tox:
-
-Running tests within the container
-``````````````````````````````````
-
-The test-suite can be run within the container using a PostgreSQL database in
-the following way:
-
-.. code-block:: bash
-
-    $ docker-compose tox
-
-.. note::
-
-    Unlike the other docker-compose services, the tox service *does not* mount
-    the local repository as a volume. This is because tox needs to write to the
-    filesystem. Make sure that the container build is up to date via
-    ``docker-compose build`` before running tests.
 
 Cloud infrastructure
 --------------------
