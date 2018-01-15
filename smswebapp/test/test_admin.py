@@ -28,4 +28,4 @@ class AdminTests(TestCase):
         """Authenticated log in to admin as superuser succeeds."""
         self.client.force_login(self.superuser)
         r = self.client.get(reverse('admin:index'))
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 400)
