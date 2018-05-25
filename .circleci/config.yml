@@ -41,7 +41,7 @@ jobs:
             ./compose/wait-for-it.sh localhost:8000 -t 15
       - run:
           name: The health-check endpoint should return a non-fail status.
-          command: curl --location --output /tmp/healthz --fail --silent --connect-timeout 2 http://localhost:8000/healthz
+          command: curl --location --output /tmp/healthz --silent --show-error --connect-timeout 2 http://localhost:8000/healthz
       - run:
           name: Tag docker image
           command: |
