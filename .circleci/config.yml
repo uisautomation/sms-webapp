@@ -39,7 +39,6 @@ jobs:
           command: |
             docker-compose --file compose/base.yml --file compose/production.yml up -d
             ./compose/wait-for-it.sh localhost:8000 -t 15
-            docker-compose --file compose/base.yml --file compose/production.yml exec production_app ./manage.py migrate
       - run:
           name: The health-check endpoint should return a non-fail status.
           command: curl --location --output /tmp/healthz --fail --silent --connect-timeout 2 http://localhost:8000/healthz
