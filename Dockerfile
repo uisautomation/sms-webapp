@@ -28,13 +28,5 @@ ENV \
 	DJANGO_SETTINGS_MODULE=smswebapp.settings.docker \
 	PORT=8000
 
-# Use gunicorn as a web-server after running migration command
-CMD gunicorn \
-	--name smswebapp \
-	--bind :$PORT \
-	--workers 3 \
-	--log-level=info \
-	--log-file=- \
-	--access-logfile=- \
-	--capture-output \
-	smswebapp.wsgi
+# Use gunicorn as a web-server
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]

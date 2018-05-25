@@ -39,10 +39,12 @@ jobs:
           command: |
             docker-compose --file compose/base.yml --file compose/production.yml up -d
             ./compose/wait-for-it.sh localhost:8000 -t 15
-            docker-compose --file compose/base.yml --file compose/production.yml exec production_app ./manage.py migrate
+      # Despite the webserver working on 8000, the web app still requires a few secs until is ready to show /healthz
       - run:
           name: The health-check endpoint should return a non-fail status.
-          command: curl --location --output /tmp/healthz --fail --silent --connect-timeout 2 http://localhost:8000/healthz
+          command: |
+            sleep 5
+            curl --location --output /tmp/healthz --silent --show-error --connect-timeout 2 http://localhost:8000/healthz
       - run:
           name: Tag docker image
           command: |
