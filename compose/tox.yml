@@ -9,7 +9,7 @@ services:
     build:
       context: ..
       dockerfile: ./Dockerfile
-    command: ["tox"]
+    entrypoint: tox
     depends_on:
       - "db"
     # Mount the local directory inside the container as a volume to allow local
