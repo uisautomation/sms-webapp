@@ -14,6 +14,12 @@ Default URL patterns for the :py:mod:`smsjwplatform` application are provided by
     ]
 
 """
+from django.urls import path
+
+from . import views
 
 app_name = 'smsjwplatform'
-urlpatterns = []
+
+urlpatterns = [
+    path('media/<media_key>', views.media, name='media'),
+]

@@ -1,4 +1,6 @@
+{% load static %}
 <!DOCTYPE html>
+{# TODO move this to templates/, if possible #}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -8,24 +10,23 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
     <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
+      Notice the use of  in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Media Service</title>
+    <title>University Media Item</title>
   </head>
   <body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
+    <div id="media"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -41,14 +42,15 @@
 
   <!-- Warn users about old browsers -->
   <script>
-  var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,unsupported:true,api:2018.05 }; 
-  function $buo_f(){ 
-   var e = document.createElement("script"); 
-   e.src = "//browser-update.org/update.min.js"; 
+  var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,unsupported:true,api:2018.05 };
+  function $buo_f(){
+   var e = document.createElement("script");
+   e.src = "//browser-update.org/update.min.js";
    document.body.appendChild(e);
   };
   try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
   catch(e){window.attachEvent("onload", $buo_f)}
   </script>
-  </body>
+
+  <script type="text/javascript" src="/static/js/bundle.js"></script></body>
 </html>
