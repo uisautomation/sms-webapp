@@ -168,7 +168,7 @@ class MediaView(APIView):
     def get(self, request, media_key):
         """Handle GET request."""
         try:
-            video = jwplatform.Video.from_key(media_key)
+            video = jwplatform.DeliveryVideo.from_key(media_key)
         except JWPlatformNotFoundError:
             raise Http404
 

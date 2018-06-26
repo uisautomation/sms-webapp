@@ -3,16 +3,24 @@ Interaction with the JWPlatform API.
 
 """
 import hashlib
+import logging
 import math
 import time
 import urllib.parse
 
+import requests
 from django.conf import settings
 import django.core.exceptions
 import jwplatform
 import jwt
+from django.http import HttpResponse
 
 from . import acl
+
+LOG = logging.getLogger(__name__)
+
+#: Default session used for making HTTP requests.
+DEFAULT_REQUESTS_SESSION = requests.Session()
 
 
 class VideoNotFoundError(RuntimeError):
@@ -99,6 +107,10 @@ class Resource(dict):
                 return True
         raise ResourceACLPermissionDenied()
 
+    def get_poster_url(self, width=720):
+        return 'https://cdn.jwplayer.com/thumbs/{key}-{width}.jpg'.format(
+            key=self.key, width=width)
+
 
 class Video(Resource):
     """
@@ -118,10 +130,6 @@ class Video(Resource):
         if field is None:
             return None
         return parse_custom_field('media', field)
-
-    def get_poster_url(self, width=720):
-        return 'https://cdn.jwplayer.com/thumbs/{key}-{width}.jpg'.format(
-            key=self.key, width=width)
 
     @classmethod
     def from_key(cls, key, client=None):
@@ -201,6 +209,72 @@ class Video(Resource):
             raise VideoNotFoundError()
 
         return video_resource
+
+
+class DeliveryVideo(Resource):
+    """
+    A dict subclass representing a video resource object as returned by the Delivery API.
+
+    This subclass provides some convenience accessors for various common resource keys but, since
+    this is a dict subclass, the values can be retrieved using ``[]`` or ``get`` as per usual.
+
+    """
+    @property
+    def acl(self):
+        """
+        The parsed ACL custom prop on the resource. If no ACL is present, the WORLD ACL is assumed.
+
+        """
+        field = parse_custom_field('acl', self.get('sms_acl', 'acl:WORLD:'))
+
+        # Work around odd ACL entries. See uisautomation/sms2jwplayer#30.
+        if field == "['']":
+            return []
+
+        return [acl.strip() for acl in field.split(',') if acl.strip() != '']
+
+    @classmethod
+    def from_key(cls, key, client=None):
+        """
+        Return a :py:class:`Video` instance corresponding to the JWPlatform key passed.
+
+        :param key: JWPlatform key for the media.
+        :param client: (optional) an authenticated JWPlatform client as returned by
+            :py:func:`.get_jwplatform_client`. If ``None``, call :py:func:`.get_jwplatform_client`.
+
+        :raises: :py:exc:`jwplatform.errors.JWPlatformNotFoundError` if the video is not found.
+
+        """
+        # Fetch the media download information from JWPlatform.
+        try:
+            response = DEFAULT_REQUESTS_SESSION.get(
+                pd_api_url(f'/v2/media/{key}', format='json'), timeout=5
+            )
+        except requests.Timeout:
+            LOG.warning('Timed out when retrieving information on video "%s"', key)
+            return HttpResponse(status=502)  # Bad gateway
+
+        # Check that the call to JWPlatform succeeded.
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            LOG.warning('Error when retrieving information on video %s: %s', key, e)
+            return HttpResponse(status=502)  # Bad gateway
+
+        # Parse response as JSON
+        try:
+            body = response.json()
+        except Exception as e:
+            LOG.warning('Failed to parse JSON response on video "%s": %s', key, e)
+            return HttpResponse(status=502)  # Bad gateway
+
+        item = body['playlist'][0]
+
+        # TODO either do this or customise id & published_at_timestamp in MediaSerializer
+        item['key'] = item.get('mediaid')
+        item['date'] = item.get('pubdate')
+
+        return cls(item)
 
 
 class Channel(Resource):

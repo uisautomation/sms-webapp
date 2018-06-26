@@ -4,7 +4,6 @@ Views
 """
 import logging
 
-from django.conf import settings
 from django.shortcuts import render
 
 LOG = logging.getLogger(__name__)

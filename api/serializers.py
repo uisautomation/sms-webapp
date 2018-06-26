@@ -30,11 +30,10 @@ class MediaSerializer(serializers.Serializer):
     )
 
     def get_ui_url(self, obj):
-        return 'https://sms.cam.ac.uk/media/{.media_id}'.format(obj)
+        return '/media/{[key]}'.format(obj)
 
     def get_player_url(self, obj):
-        return jwplatform.player_embed_url(obj.get('key'), settings.JWPLATFORM_EMBED_PLAYER_KEY, 'js')
-
+        return jwplatform.player_embed_url(obj['key'], settings.JWPLATFORM_EMBED_PLAYER_KEY, 'js')
 
     def get_poster_image_url(self, obj):
         return obj.get_poster_url()
