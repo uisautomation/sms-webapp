@@ -157,6 +157,12 @@ class MediaListViewTestCase(ViewTestCase):
         self.assertEqual(call_args[1]['search'], 'foo')
 
 
+class MediaViewTestCase(ViewTestCase):
+
+    def test_it(self):
+        self.fail()
+
+
 CHANNELS_FIXTURE = [
     {
         'key': 'mock1',

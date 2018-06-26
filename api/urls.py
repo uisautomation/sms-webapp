@@ -27,6 +27,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('collections/', views.CollectionListView.as_view(), name='collections'),
     path('media/', views.MediaListView.as_view(), name='media'),
+    path('media/<media_key>', views.MediaView.as_view(), name='media'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     re_path(
         r'^swagger(?P<format>\.json|\.yaml)$',

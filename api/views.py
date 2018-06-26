@@ -6,8 +6,10 @@ import copy
 import logging
 
 from django.conf import settings
+from django.http import Http404
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.exceptions import APIException
+from jwplatform.errors import JWPlatformNotFoundError
+from rest_framework.exceptions import APIException, PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -153,6 +155,27 @@ class MediaListView(APIView):
         ]
 
         return Response(serializers.MediaListSerializer(video_list).data)
+
+
+class MediaView(APIView):
+    """
+    Endpoint to retrieve a single media item.
+
+    """
+    @swagger_auto_schema(
+        responses={200: serializers.MediaSerializer()}
+    )
+    def get(self, request, media_key):
+        """Handle GET request."""
+        try:
+            video = jwplatform.Video.from_key(media_key)
+        except JWPlatformNotFoundError:
+            raise Http404
+
+        if not user_can_view_resource(request.user, video):
+            raise PermissionDenied
+
+        return Response(serializers.MediaSerializer(video).data)
 
 
 def user_can_view_resource(user, resource):
