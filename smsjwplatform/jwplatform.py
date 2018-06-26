@@ -19,7 +19,7 @@ from . import acl
 
 LOG = logging.getLogger(__name__)
 
-#: Default session used for making HTTP requests.
+# Default session used for making HTTP requests.
 DEFAULT_REQUESTS_SESSION = requests.Session()
 
 

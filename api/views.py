@@ -170,6 +170,7 @@ class MediaView(APIView):
         try:
             video = jwplatform.DeliveryVideo.from_key(media_key)
         except JWPlatformNotFoundError:
+            # FIXME this is never going to work as the Delivery API erroneously returns a 502
             raise Http404
 
         if not user_can_view_resource(request.user, video):
