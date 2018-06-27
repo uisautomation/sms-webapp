@@ -5,13 +5,15 @@ import IndexPage from './pages/IndexPage';
 import MediaPage from './pages/MediaPage';
 
 const mappings = {
+  'media': <MediaPage/>,
   'root': <IndexPage/>,
-  'media': <MediaPage/>
 };
 
-for (var id in mappings) {
-  let element = document.getElementById(id);
-  if (element) {
-    ReactDOM.render(mappings[id], element as HTMLElement);
+for (const id in mappings) {
+  if (mappings.hasOwnProperty(id)) {
+    const element = document.getElementById(id);
+    if (element) {
+      ReactDOM.render(mappings[id], element as HTMLElement);
+    }
   }
 }

@@ -5,6 +5,7 @@ Views implementing the API endpoints.
 import copy
 import logging
 
+import requests
 from django.conf import settings
 from django.http import Http404
 from drf_yasg.utils import swagger_auto_schema
@@ -169,9 +170,11 @@ class MediaView(APIView):
         """Handle GET request."""
         try:
             video = jwplatform.DeliveryVideo.from_key(media_key)
-        except JWPlatformNotFoundError:
-            # FIXME this is never going to work as the Delivery API erroneously returns a 502
-            raise Http404
+        except requests.exceptions.HTTPError as e:
+            # FIXME find a better way of doing this
+            if e.__dict__['response'].status_code == 404:
+                raise Http404
+            raise e
 
         if not user_can_view_resource(request.user, video):
             raise PermissionDenied

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '../components/AppBar';
@@ -9,16 +10,22 @@ import { withProfile } from '../providers/ProfileProvider';
 import withRoot from './withRoot';
 
 /**
- * The index page for the FIXME
+ * The media item page
  */
 const MediaPage = ({ classes }) => (
   <div className={ classes.page }>
     <AppBar position="fixed">
       <ProfileButton variant="flat" color="inherit" />
     </AppBar>
-
-    <div className={ classes.body }>
-      Some Media
+      <div className={ classes.body }>
+      <section>
+        <Typography component='div' paragraph style={{padding:'0px 200px',}}>
+          <div style={{position:'relative', paddingBottom:'56.25%', overflow:'hidden'}}>
+            <iframe src={window.media_item.player_url} width="100%" height="100%" frameborder="0" allowfullscreen style={{position:'absolute'}}>
+            </iframe>
+          </div>
+        </Typography>
+      </section>
     </div>
   </div>
 );
@@ -47,7 +54,8 @@ const ProfileButton = withProfile(({ profile, ...otherProps }) => {
   );
 });
 
-const styles = theme => ({
+/* tslint:disable object-literal-sort-keys */
+var styles = theme => ({
   body: {
     margin: [[0, 'auto']],
     paddingLeft: theme.spacing.unit * 2,
@@ -59,11 +67,19 @@ const styles = theme => ({
       paddingRight: theme.spacing.unit * 3,
     },
   },
+  videoWrapper: {
+    backgroundColor: 'black',
+    position: 'absolute',
+    left: 0, top: 0, right: 0, bottom: 0,
+    display: 'flex', flexDirection: 'column', justifyContent: 'center'
+  },
   page: {
     minHeight: '100vh',
     paddingTop: theme.spacing.unit * 8,
     width: '100%',
-  }
+  },
+
 });
+/* tslint:enable */
 
 export default withRoot(withStyles(styles)(MediaPage));

@@ -30,7 +30,7 @@ class VideoNotFoundError(RuntimeError):
     """
 
 
-def player_embed_url(key, player, format='js'):
+def player_embed_url(key, player, format='js', base=settings.JWPLATFORM_API_BASE_URL):
     """
     Return a signed URL pointing to a player initialised with a specific media item.
 
@@ -45,10 +45,9 @@ def player_embed_url(key, player, format='js'):
         <https://developer.jwplayer.com/jw-platform/docs/delivery-api-reference/#!/players/get_players_content_id_player_id_embed_type>`_.
 
     """
-    url = urllib.parse.urljoin(
-        settings.JWPLATFORM_API_BASE_URL,
-        '/players/{key}-{player}.{format}'.format(
-            key=key, player=player, format=format))
+    url = urllib.parse.urljoin(base, '/players/{key}-{player}.{format}'.format(
+        key=key, player=player, format=format
+    ))
     return signed_url(url)
 
 
@@ -246,27 +245,14 @@ class DeliveryVideo(Resource):
 
         """
         # Fetch the media download information from JWPlatform.
-        try:
-            response = DEFAULT_REQUESTS_SESSION.get(
-                pd_api_url(f'/v2/media/{key}', format='json'), timeout=5
-            )
-        except requests.Timeout:
-            LOG.warning('Timed out when retrieving information on video "%s"', key)
-            return HttpResponse(status=502)  # Bad gateway
+        response = DEFAULT_REQUESTS_SESSION.get(
+            pd_api_url(f'/v2/media/{key}', format='json'), timeout=5
+        )
 
-        # Check that the call to JWPlatform succeeded.
-        try:
-            response.raise_for_status()
-        except requests.HTTPError as e:
-            LOG.warning('Error when retrieving information on video %s: %s', key, e)
-            return HttpResponse(status=502)  # Bad gateway
+        response.raise_for_status()
 
         # Parse response as JSON
-        try:
-            body = response.json()
-        except Exception as e:
-            LOG.warning('Failed to parse JSON response on video "%s": %s', key, e)
-            return HttpResponse(status=502)  # Bad gateway
+        body = response.json()
 
         item = body['playlist'][0]
 

@@ -6,6 +6,7 @@ import logging
 
 import requests
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render
 
 LOG = logging.getLogger(__name__)
@@ -23,6 +24,9 @@ def media(request, media_key):
 
     """
     response = DEFAULT_REQUESTS_SESSION.get(settings.MEDIA_API_URL + 'media/' + media_key)
+
+    if not response.ok:
+        return HttpResponse(status=response.status_code)
 
     # Check that the call to the Media API succeeded.
     response.raise_for_status()

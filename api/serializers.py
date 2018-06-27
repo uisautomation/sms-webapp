@@ -33,7 +33,10 @@ class MediaSerializer(serializers.Serializer):
         return '/media/{[key]}'.format(obj)
 
     def get_player_url(self, obj):
-        return jwplatform.player_embed_url(obj['key'], settings.JWPLATFORM_EMBED_PLAYER_KEY, 'js')
+        return jwplatform.player_embed_url(
+            obj['key'], settings.JWPLATFORM_EMBED_PLAYER_KEY, 'html',
+            settings.JWPLATFORM_CONTENT_BASE_URL
+        )
 
     def get_poster_image_url(self, obj):
         return obj.get_poster_url()
