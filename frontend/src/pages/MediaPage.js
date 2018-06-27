@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '../components/AppBar';
-import { withProfile } from '../providers/ProfileProvider';
 import withRoot from './withRoot';
+import ProfileButton from "../components/ProfileButton";
 
 /**
  * The media item page
@@ -34,26 +32,6 @@ const MediaPage = ({ classes }) => (
 MediaPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-/** A button which allows sign in if the current user is anonymous or presents their username. */
-// FIXME move this
-const ProfileButton = withProfile(({ profile, ...otherProps }) => {
-  if(!profile) { return null; }
-
-  if(profile.is_anonymous) {
-    return (
-      <Button component='a' href={profile.urls.login} {...otherProps}>
-        Sign in
-      </Button>
-    );
-  }
-
-  return (
-    <Button {...otherProps}>
-      { profile.username }
-    </Button>
-  );
-});
 
 /* tslint:disable object-literal-sort-keys */
 var styles = theme => ({

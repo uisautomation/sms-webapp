@@ -11,6 +11,7 @@ import MediaList from '../components/MediaList';
 import SearchResultsProvider, { withSearchResults } from '../providers/SearchResultsProvider';
 import { withProfile } from '../providers/ProfileProvider';
 import withRoot from './withRoot';
+import ProfileButton from "../components/ProfileButton";
 
 /**
  * The index page for the web application. Upon mount, it fetches a list of the latest media items
@@ -102,25 +103,6 @@ const SearchResultsSection = withSearchResults(({ resultItems, isLoading }) => (
     />
   ) : null
 ));
-
-/** A button which allows sign in if the current user is anonymous or presents their username. */
-const ProfileButton = withProfile(({ profile, ...otherProps }) => {
-  if(!profile) { return null; }
-
-  if(profile.is_anonymous) {
-    return (
-      <Button component='a' href={profile.urls.login} {...otherProps}>
-        Sign in
-      </Button>
-    );
-  }
-
-  return (
-    <Button {...otherProps}>
-      { profile.username }
-    </Button>
-  );
-});
 
 const mediaListSectionStyles = theme => ({
   root: {
