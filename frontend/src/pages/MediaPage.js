@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
@@ -17,14 +18,14 @@ const MediaPage = ({ classes }) => (
     <AppBar position="fixed">
       <ProfileButton variant="flat" color="inherit" />
     </AppBar>
-      <div className={ classes.body }>
+    <div className={ classes.body }>
       <section>
-        <Typography component='div' paragraph style={{padding:'0px 200px',}}>
-          <div style={{position:'relative', paddingBottom:'56.25%', overflow:'hidden'}}>
-            <iframe src={window.media_item.player_url} width="100%" height="100%" frameborder="0" allowfullscreen style={{position:'absolute'}}>
+        <Grid container spacing={16} className={ classes.gridContainer }>
+          <Grid item xs={12} className={ classes.gridItem } style={{paddingBottom:'56.25%'}}>
+            <iframe src={window.media_item.player_url} className={ classes.player } width="100%" height="100%" frameborder="0" allowfullscreen>
             </iframe>
-          </div>
-        </Typography>
+          </Grid>
+        </Grid>
       </section>
     </div>
   </div>
@@ -56,6 +57,11 @@ const ProfileButton = withProfile(({ profile, ...otherProps }) => {
 
 /* tslint:disable object-literal-sort-keys */
 var styles = theme => ({
+  page: {
+    minHeight: '100vh',
+    paddingTop: theme.spacing.unit * 8,
+    width: '100%',
+  },
   body: {
     margin: [[0, 'auto']],
     paddingLeft: theme.spacing.unit * 2,
@@ -67,18 +73,17 @@ var styles = theme => ({
       paddingRight: theme.spacing.unit * 3,
     },
   },
-  videoWrapper: {
-    backgroundColor: 'black',
-    position: 'absolute',
-    left: 0, top: 0, right: 0, bottom: 0,
-    display: 'flex', flexDirection: 'column', justifyContent: 'center'
+  gridContainer: {
+    maxWidth: 1260,
+    margin: '0 auto'
   },
-  page: {
-    minHeight: '100vh',
-    paddingTop: theme.spacing.unit * 8,
-    width: '100%',
+  gridItem: {
+    position:'relative',
+    overflow:'hidden'
   },
-
+  player: {
+    position:'absolute'
+  },
 });
 /* tslint:enable */
 
