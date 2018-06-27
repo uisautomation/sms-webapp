@@ -20,7 +20,7 @@ const MediaPage = ({ classes }) => (
       <section>
         <Grid container spacing={16} className={ classes.gridContainer }>
           <Grid item xs={12} className={ classes.gridItem } style={{paddingBottom:'56.25%'}}>
-            <iframe src={window.media_item.player_url} className={ classes.player } width="100%" height="100%" frameborder="0" allowfullscreen>
+            <iframe src={window.media_item.player_url} className={ classes.player } width="100%" height="100%" frameBorder="0" allowFullScreen>
             </iframe>
           </Grid>
         </Grid>

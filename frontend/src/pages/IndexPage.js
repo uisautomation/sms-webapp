@@ -23,7 +23,11 @@ import ProfileButton from "../components/ProfileButton";
  */
 class IndexPage extends Component {
   constructor() {
-    super()
+    super();
+
+    // check to see if there are any search params
+    const params = new URLSearchParams(location.search);
+    const search = params.get('q');
 
     this.state = {
       // Is the latest media list loading.
@@ -32,8 +36,8 @@ class IndexPage extends Component {
       // The latest media list response from the API, if any.
       latestMediaResponse: null,
 
-      // Is the search query loading?
-      searchQuery: null,
+      // Is a search query defined/loading?
+      searchQuery: search ? { search } : null,
     }
   }
 
@@ -55,7 +59,7 @@ class IndexPage extends Component {
     const { searchQuery, latestMediaLoading, latestMediaResponse } = this.state;
     return (
       <div className={ classes.page }>
-        <AppBar position="fixed" onSearch={q => this.handleSearch(q)}>
+        <AppBar position="fixed" defaultSearch={searchQuery ? searchQuery.search : null}>
           <ProfileButton variant="flat" color="inherit" />
         </AppBar>
 
