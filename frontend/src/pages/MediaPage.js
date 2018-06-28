@@ -26,7 +26,7 @@ const MediaPage = ({ mediaItem, classes }) => (
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subheading" gutterBottom>
-              <a target='_blank' href={mediaItem.sources[0].url}>
+              <a target='_blank' href={mediaItem.bestSource.url} download>
                 Download media
               </a>
             </Typography>
@@ -52,7 +52,7 @@ const withMediaItem = WrappedComponent => props => {
 
   mediaItem.bestSource = null;
 
-  for (let i = 0; i < mediaItem.sources; i++) {
+  for (let i = 0; i < mediaItem.sources.length; i++) {
 
     if (!mediaItem.bestSource) {
       mediaItem.bestSource = mediaItem.sources[i];
