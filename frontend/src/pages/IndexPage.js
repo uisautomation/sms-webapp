@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -9,7 +8,6 @@ import { mediaList, mediaResourceToItem } from '../api';
 import AppBar from '../components/AppBar';
 import MediaList from '../components/MediaList';
 import SearchResultsProvider, { withSearchResults } from '../providers/SearchResultsProvider';
-import { withProfile } from '../providers/ProfileProvider';
 import withRoot from './withRoot';
 import ProfileButton from "../components/ProfileButton";
 

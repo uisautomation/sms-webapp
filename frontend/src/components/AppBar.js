@@ -22,7 +22,12 @@ const styles = theme => ({
 
     [theme.breakpoints.down('sm')]: {
       display: 'none',
-    }
+    },
+  },
+
+  homeLink: {
+    color: 'white',
+    textDecoration: 'none',
   },
 
   appBarMiddle: {
@@ -70,7 +75,7 @@ const AppBar = (
     <Grid container component={Toolbar}>
       <Grid item xs={3} className={classes.appBarLeft}>
           <Typography variant="title" color="inherit">
-            Media&nbsp;Service
+            <a className={classes.homeLink} href='/'>Media&nbsp;Service</a>
           </Typography>
       </Grid>
       <Grid item xs={12} sm={9} md={6} className={classes.appBarMiddle}>

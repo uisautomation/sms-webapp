@@ -8,6 +8,16 @@ from smsjwplatform import jwplatform
 LOG = logging.getLogger(__name__)
 
 
+class SourceSerializer(serializers.Serializer):
+    """
+    A download source for a particular media type.
+
+    """
+    type = serializers.CharField(help_text="The resource's MIME type")
+    url = serializers.URLField(source='file', help_text="The resource's URL")
+    width = serializers.IntegerField(help_text='The video width', required=False)
+    height = serializers.IntegerField(help_text='The video height', required=False)
+
 class MediaSerializer(serializers.Serializer):
     """
     An individual media item.
@@ -27,6 +37,10 @@ class MediaSerializer(serializers.Serializer):
     )
     player_url = serializers.SerializerMethodField(
         help_text='A URL to retrieve an embeddable player for the media item.'
+    )
+    sources = SourceSerializer(
+        help_text='A collection of download URLs for different media types.',
+        required=False, many=True
     )
 
     def get_ui_url(self, obj):
