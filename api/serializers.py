@@ -18,6 +18,7 @@ class SourceSerializer(serializers.Serializer):
     width = serializers.IntegerField(help_text='The video width', required=False)
     height = serializers.IntegerField(help_text='The video height', required=False)
 
+
 class MediaSerializer(serializers.Serializer):
     """
     An individual media item.

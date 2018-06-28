@@ -5,7 +5,6 @@ Views implementing the API endpoints.
 import copy
 import logging
 
-import requests
 from django.db.models import Q
 from django.conf import settings
 from django.http import Http404

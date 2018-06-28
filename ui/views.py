@@ -28,7 +28,4 @@ def media(request, media_key):
     if not response.ok:
         return HttpResponse(status=response.status_code)
 
-    # Check that the call to the Media API succeeded.
-    response.raise_for_status()
-
     return render(request, 'ui/media.html', {'media_item': response.content.decode("utf-8")})
