@@ -16,10 +16,12 @@ class ViewsTestCase(TestCase):
     @mock.patch('ui.views.DEFAULT_REQUESTS_SESSION.get')
     def test_success(self, mock_get):
         """checks that a media item is rendered successfully"""
-        media_item = {}
+        media_item_json = mock.Mock()
+        media_item = mock.Mock()
         response = mock.Mock()
         response.ok = True
-        response.content.decode.return_value = media_item
+        response.content.decode.return_value = media_item_json
+        response.json.return_value = media_item
         mock_get.return_value = response
 
         # test
@@ -28,7 +30,8 @@ class ViewsTestCase(TestCase):
         mock_get.assert_called_with(settings.MEDIA_API_URL + 'media/XYZ123')
         self.assertEqual(r.status_code, 200)
         self.assertTemplateUsed(r, 'ui/media.html')
-        self.assertEqual(r.context['media_item'], media_item)
+        self.assertIs(r.context['media_item_json'], media_item_json)
+        self.assertIs(r.context['media_item'], media_item)
 
     @mock.patch('ui.views.DEFAULT_REQUESTS_SESSION.get')
     def test_video_not_found(self, mock_get):

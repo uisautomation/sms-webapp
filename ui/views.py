@@ -28,4 +28,7 @@ def media(request, media_key):
     if not response.ok:
         return HttpResponse(status=response.status_code)
 
-    return render(request, 'ui/media.html', {'media_item': response.content.decode("utf-8")})
+    return render(request, 'ui/media.html', {
+        'media_item': response.json(),
+        'media_item_json': response.content.decode("utf-8")
+    })
