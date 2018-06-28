@@ -52,14 +52,14 @@ const withMediaItem = WrappedComponent => props => {
 
   mediaItem.bestSource = null;
 
-  for (let i in mediaItem.sources) {
+  for (let i = 0; i < mediaItem.sources; i++) {
 
     if (!mediaItem.bestSource) {
       mediaItem.bestSource = mediaItem.sources[i];
     }
 
-    if (mediaItem.sources[i].type == "video/mp4") {
-      if (mediaItem.bestSource.type != mediaItem.sources[i].type) {
+    if (mediaItem.sources[i].type === "video/mp4") {
+      if (mediaItem.bestSource.type !== mediaItem.sources[i].type) {
         mediaItem.bestSource = mediaItem.sources[i];
       }
       if (mediaItem.bestSource.height < mediaItem.sources[i].height) {
