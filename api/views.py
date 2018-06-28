@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from smsjwplatform import jwplatform
+from smsjwplatform.jwplatform import VideoNotFoundError
 from smsjwplatform.models import CachedResource
 
 from . import serializers
@@ -182,13 +183,12 @@ class MediaView(APIView):
     )
     def get(self, request, media_key):
         """Handle GET request."""
+
         try:
             video = jwplatform.DeliveryVideo.from_key(media_key)
-        except requests.exceptions.HTTPError as e:
-            # FIXME find a better way of doing this
-            if e.__dict__['response'].status_code == 404:
-                raise Http404
-            raise e
+        except VideoNotFoundError:
+            # if we don't find a video raise a 404
+            raise Http404
 
         if not user_can_view_resource(request.user, video):
             raise PermissionDenied

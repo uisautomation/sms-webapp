@@ -14,7 +14,6 @@ from django.conf import settings
 import django.core.exceptions
 import jwplatform
 import jwt
-from django.http import HttpResponse
 
 from . import acl
 from . import models
@@ -28,6 +27,13 @@ DEFAULT_REQUESTS_SESSION = requests.Session()
 class VideoNotFoundError(RuntimeError):
     """
     The provided SMS media ID does not have a corresponding JWPlatform video.
+
+    """
+
+
+class UnparseableVideoError(RuntimeError):
+    """
+    The JWPlayer JSON response body was unparseable.
 
     """
 
@@ -230,13 +236,13 @@ class DeliveryVideo(Resource):
     @classmethod
     def from_key(cls, key, client=None):
         """
-        Return a :py:class:`Video` instance corresponding to the JWPlatform key passed.
+        Return a :py:class:`DeliveryVideo` instance corresponding to the JWPlatform key passed.
 
         :param key: JWPlatform key for the media.
         :param client: (optional) an authenticated JWPlatform client as returned by
             :py:func:`.get_jwplatform_client`. If ``None``, call :py:func:`.get_jwplatform_client`.
 
-        :raises: :py:exc:`jwplatform.errors.JWPlatformNotFoundError` if the video is not found.
+        :raises: :py:exc:`VideoNotFoundError` if the video is not found.
 
         """
         # Fetch the media download information from JWPlatform.
@@ -244,10 +250,20 @@ class DeliveryVideo(Resource):
             pd_api_url(f'/v2/media/{key}', format='json'), timeout=5
         )
 
+        if response.status_code == 404:
+            LOG.warning("Couldn't find video for key '%s'", key)
+            raise VideoNotFoundError
+
+        # translate
         response.raise_for_status()
 
         # Parse response as JSON
-        body = response.json()
+        try:
+            body = response.json()
+        except Exception as e:
+            message = 'Failed to parse response when retrieving video "%s": %s'.format(key, e)
+            LOG.warning(message)
+            raise UnparseableVideoError(message)
 
         item = body['playlist'][0]
 
