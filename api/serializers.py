@@ -43,6 +43,9 @@ class MediaSerializer(serializers.Serializer):
         help_text='A collection of download URLs for different media types.',
         required=False, many=True
     )
+    legacy_stats_url = serializers.SerializerMethodField(
+        help_text='A URL linking to the stats page in the legacy SMS app for the media item.'
+    )
 
     def get_ui_url(self, obj):
         return '/media/{[key]}'.format(obj)
@@ -55,6 +58,11 @@ class MediaSerializer(serializers.Serializer):
 
     def get_poster_image_url(self, obj):
         return obj.get_poster_url()
+
+    def get_legacy_stats_url(self, obj):
+        if not obj.media_id:
+            return None
+        return 'https://sms.cam.ac.uk/media/{.media_id}/statistics'.format(obj)
 
 
 class MediaListSerializer(serializers.Serializer):

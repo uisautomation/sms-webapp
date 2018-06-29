@@ -220,6 +220,17 @@ class DeliveryVideo(Resource):
 
     """
     @property
+    def media_id(self):
+        """
+        The legacy SMS media id (or None if there is none)
+
+        """
+        field = self.get('sms_media_id')
+        if field is None:
+            return None
+        return parse_custom_field('media', field)
+
+    @property
     def acl(self):
         """
         The parsed ACL custom prop on the resource. If no ACL is present, the WORLD ACL is assumed.

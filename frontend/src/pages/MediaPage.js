@@ -23,6 +23,9 @@ const MediaPage = ({ mediaItem, classes }) => (
             <a target='_blank' className={ classes.link } href={mediaItem.bestSource.url} download>
               Download media
             </a>
+            <a className={ classes.link } href={mediaItem.legacy_stats_url} style={{float: 'right'}}>
+              Statistics
+            </a>
           </Typography>
         </Grid>
       </Grid>
