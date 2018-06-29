@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import { mediaList, mediaResourceToItem } from '../api';
-import AppBar from '../components/AppBar';
 import MediaList from '../components/MediaList';
-import MotdBanner from '../components/MotdBanner';
 import SearchResultsProvider, { withSearchResults } from '../providers/SearchResultsProvider';
-import withRoot from './withRoot';
-import { ProfileButtonWithProfile } from "../components/ProfileButton";
+import Page from "../components/Page";
 
 /**
  * The index page for the web application. Upon mount, it fetches a list of the latest media items
@@ -54,42 +50,29 @@ class IndexPage extends Component {
   }
 
   render() {
-    const { classes } = this.props;
     const { searchQuery, latestMediaLoading, latestMediaResponse } = this.state;
     return (
-      <div className={ classes.page }>
-        <AppBar position="fixed" defaultSearch={searchQuery ? searchQuery.search : null}>
-          <ProfileButtonWithProfile variant="flat" color="inherit" />
-        </AppBar>
+      <Page defaultSearch={searchQuery ? searchQuery.search : null}>
+        <SearchResultsProvider query={searchQuery}>
+          <SearchResultsSection />
+        </SearchResultsProvider>
 
-        <div className={classes.body}>
-          <MotdBanner />
-
-          <SearchResultsProvider query={searchQuery}>
-            <SearchResultsSection />
-          </SearchResultsProvider>
-
-          <MediaListSection
-            title="Latest Media"
-            MediaListProps={{
-              contentLoading: latestMediaLoading,
-              maxItemCount: 18,
-              mediaItems: (
-                (latestMediaResponse && latestMediaResponse.results)
-                ? latestMediaResponse.results.map(mediaResourceToItem)
-                : []
-              ),
-            }}
-          />
-        </div>
-      </div>
+        <MediaListSection
+          title="Latest Media"
+          MediaListProps={{
+            contentLoading: latestMediaLoading,
+            maxItemCount: 18,
+            mediaItems: (
+              (latestMediaResponse && latestMediaResponse.results)
+              ? latestMediaResponse.results.map(mediaResourceToItem)
+              : []
+            ),
+          }}
+        />
+      </Page>
     );
   }
 }
-
-IndexPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 /**
  * If there are search results, this component shows a section with the current search results in
@@ -135,12 +118,6 @@ const MediaListSection = withStyles(mediaListSectionStyles)((
 ));
 
 const styles = theme => ({
-  page: {
-    minHeight: '100vh',
-    paddingTop: theme.spacing.unit * 8,
-    width: '100%',
-  },
-
   searchPaper: {
     padding: theme.spacing.unit * 4,
   },
@@ -162,4 +139,4 @@ const styles = theme => ({
   },
 });
 
-export default withRoot(withStyles(styles)(IndexPage));
+export default IndexPage;

@@ -12,7 +12,11 @@ import {withProfile} from "../providers/ProfileProvider";
  * already wired to the profile provider.
  */
 const ProfileButton = ({ profile, ...otherProps }) => {
-  if(!profile) { return null; }
+  if(!profile) {
+    return (
+      <Button {...otherProps}>Sign in</Button>
+    );
+  }
 
   if(profile.is_anonymous) {
     return (
