@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '../components/AppBar';
 import withRoot from './withRoot';
-import ProfileButton from "../components/ProfileButton";
+import { ProfileButtonWithProfile } from "../components/ProfileButton";
 import MotdBanner from "../components/MotdBanner";
 
 /**
@@ -16,7 +16,7 @@ import MotdBanner from "../components/MotdBanner";
 const MediaPage = ({ mediaItem, classes }) => (
   <div className={ classes.page }>
     <AppBar position="fixed">
-      <ProfileButton variant="flat" color="inherit" />
+      <ProfileButtonWithProfile variant="flat" color="inherit" />
     </AppBar>
     <div className={ classes.body }>
       <MotdBanner />

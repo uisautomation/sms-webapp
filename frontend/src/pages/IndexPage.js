@@ -10,7 +10,7 @@ import MediaList from '../components/MediaList';
 import MotdBanner from '../components/MotdBanner';
 import SearchResultsProvider, { withSearchResults } from '../providers/SearchResultsProvider';
 import withRoot from './withRoot';
-import ProfileButton from "../components/ProfileButton";
+import { ProfileButtonWithProfile } from "../components/ProfileButton";
 
 /**
  * The index page for the web application. Upon mount, it fetches a list of the latest media items
@@ -59,7 +59,7 @@ class IndexPage extends Component {
     return (
       <div className={ classes.page }>
         <AppBar position="fixed" defaultSearch={searchQuery ? searchQuery.search : null}>
-          <ProfileButton variant="flat" color="inherit" />
+          <ProfileButtonWithProfile variant="flat" color="inherit" />
         </AppBar>
 
         <div className={classes.body}>

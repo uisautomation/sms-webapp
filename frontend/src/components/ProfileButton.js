@@ -5,7 +5,11 @@ import Button from '@material-ui/core/Button';
 import {withProfile} from "../providers/ProfileProvider";
 
 /**
- * A button which allows sign in if the current user is anonymous or presents their username.
+ * A button which allows sign in if the current user is anonymous or presents their username. Properties
+ * appropriate to the material-ui Button component (apart from ``component`` and ``href``) can be used.
+ *
+ * In addition to the basic component, ``ProfileButtonWithProfile`` is exported which is ``ProfileButton``
+ * already wired to the profile provider.
  */
 const ProfileButton = ({ profile, ...otherProps }) => {
   if(!profile) { return null; }
@@ -25,4 +29,7 @@ const ProfileButton = ({ profile, ...otherProps }) => {
   );
 };
 
-export default withProfile(ProfileButton);
+const ProfileButtonWithProfile = withProfile(ProfileButton);
+
+export { ProfileButtonWithProfile };
+export default ProfileButton;
