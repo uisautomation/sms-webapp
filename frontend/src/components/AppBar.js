@@ -74,9 +74,9 @@ const AppBar = (
   <MuiAppBar position="static" color={color} className={classes.root} {...otherProps}>
     <Grid container component={Toolbar}>
       <Grid item xs={3} className={classes.appBarLeft}>
-          <Typography variant="title" color="inherit">
-            <a className={classes.homeLink} href='/'>Media&nbsp;Service</a>
-          </Typography>
+        <Typography variant="title" color="inherit">
+          <a className={classes.homeLink} href='/'>University Media Platform</a>
+        </Typography>
       </Grid>
       <Grid item xs={12} sm={9} md={6} className={classes.appBarMiddle}>
         <SearchForm

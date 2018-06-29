@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { mediaList, mediaResourceToItem } from '../api';
 import AppBar from '../components/AppBar';
 import MediaList from '../components/MediaList';
+import MotdBanner from '../components/MotdBanner';
 import SearchResultsProvider, { withSearchResults } from '../providers/SearchResultsProvider';
 import withRoot from './withRoot';
 import ProfileButton from "../components/ProfileButton";
@@ -62,6 +63,8 @@ class IndexPage extends Component {
         </AppBar>
 
         <div className={classes.body}>
+          <MotdBanner />
+
           <SearchResultsProvider query={searchQuery}>
             <SearchResultsSection />
           </SearchResultsProvider>
@@ -109,6 +112,7 @@ const SearchResultsSection = withSearchResults(({ resultItems, isLoading }) => (
 const mediaListSectionStyles = theme => ({
   root: {
     marginBottom: theme.spacing.unit * 4,
+    marginTop: theme.spacing.unit * 2,
   },
 });
 
@@ -150,7 +154,6 @@ const styles = theme => ({
     margin: [[0, 'auto']],
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
-    paddingTop: theme.spacing.unit * 3,
 
     [theme.breakpoints.up('sm')]: {
       paddingLeft: theme.spacing.unit * 3,
