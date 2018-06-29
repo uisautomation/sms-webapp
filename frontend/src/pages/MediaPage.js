@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '../components/AppBar';
 import withRoot from './withRoot';
 import ProfileButton from "../components/ProfileButton";
+import MotdBanner from "../components/MotdBanner";
 
 /**
  * The media item page
@@ -18,6 +19,8 @@ const MediaPage = ({ mediaItem, classes }) => (
       <ProfileButton variant="flat" color="inherit" />
     </AppBar>
     <div className={ classes.body }>
+      <MotdBanner />
+
       <section>
         <Grid container spacing={16} className={ classes.gridContainer }>
           <Grid item xs={12} className={ classes.playerWrapper } style={{paddingBottom:'56.25%'}}>
@@ -26,7 +29,7 @@ const MediaPage = ({ mediaItem, classes }) => (
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subheading" gutterBottom>
-              <a target='_blank' href={mediaItem.bestSource.url} download>
+              <a target='_blank' className={ classes.link } href={mediaItem.bestSource.url} download>
                 Download media
               </a>
             </Typography>
@@ -99,6 +102,9 @@ var styles = theme => ({
   },
   player: {
     position:'absolute'
+  },
+  link: {
+    color: theme.palette.text.secondary,
   },
 });
 /* tslint:enable */
