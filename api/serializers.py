@@ -1,9 +1,22 @@
 import logging
 
+from django.conf import settings
 from rest_framework import serializers
 
+from smsjwplatform import jwplatform
 
 LOG = logging.getLogger(__name__)
+
+
+class SourceSerializer(serializers.Serializer):
+    """
+    A download source for a particular media type.
+
+    """
+    type = serializers.CharField(help_text="The resource's MIME type")
+    url = serializers.URLField(source='file', help_text="The resource's URL")
+    width = serializers.IntegerField(help_text='The video width', required=False)
+    height = serializers.IntegerField(help_text='The video height', required=False)
 
 
 class MediaSerializer(serializers.Serializer):
@@ -23,12 +36,33 @@ class MediaSerializer(serializers.Serializer):
     ui_url = serializers.SerializerMethodField(
         help_text='A URL for the media item. This is a URL for the media UI, not a resource URL.'
     )
+    player_url = serializers.SerializerMethodField(
+        help_text='A URL to retrieve an embeddable player for the media item.'
+    )
+    sources = SourceSerializer(
+        help_text='A collection of download URLs for different media types.',
+        required=False, many=True
+    )
+    legacy_stats_url = serializers.SerializerMethodField(
+        help_text='A URL linking to the stats page in the legacy SMS app for the media item.'
+    )
 
     def get_ui_url(self, obj):
-        return 'https://sms.cam.ac.uk/media/{.media_id}'.format(obj)
+        return '/media/{[key]}'.format(obj)
+
+    def get_player_url(self, obj):
+        return jwplatform.player_embed_url(
+            obj['key'], settings.JWPLATFORM_EMBED_PLAYER_KEY, 'html',
+            settings.JWPLATFORM_CONTENT_BASE_URL
+        )
 
     def get_poster_image_url(self, obj):
         return obj.get_poster_url()
+
+    def get_legacy_stats_url(self, obj):
+        if not obj.media_id:
+            return None
+        return 'https://sms.cam.ac.uk/media/{.media_id}/statistics'.format(obj)
 
 
 class MediaListSerializer(serializers.Serializer):

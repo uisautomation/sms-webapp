@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     'smsjwplatform',
     'legacysms',
+    'ui',
 ]
 
 #: Installed middleware
@@ -217,3 +218,6 @@ FRONTEND_APP_BUILD_DIR = os.environ.get(
     'DJANGO_FRONTEND_APP_BUILD_DIR',
     os.path.abspath(os.path.join(BASE_DIR, 'frontend', 'build'))
 )
+
+# The base url for Media API - used by the 'ui' application
+MEDIA_API_URL = 'http://localhost:8080/api/'

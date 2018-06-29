@@ -21,15 +21,25 @@ export interface IError {
   response?: Response,
 };
 
+/** A media download source. */
+export interface ISource {
+  type: string;
+  url: string;
+  width?: number;
+  height?: number;
+}
+
 /** A media resource. */
 export interface IMediaResource {
   id: string;
-  ui_url: string;
   title: string;
   description: string;
-  poster_image_url?: string;
   published_at_timestamp: number;
+  poster_image_url?: string;
   duration: number;
+  player_url: string;
+  ui_url: string;
+  source?: ISource[];
 };
 
 /** A collection resource. */
