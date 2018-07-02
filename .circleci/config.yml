@@ -16,6 +16,12 @@ jobs:
       - checkout
 
       - run:
+          name: temp test - check if key is available
+          if [ -z "$GCLOUD_SERVICE_KEY" ]; then
+            echo "exiting as there are no GCloud secrets"
+            exit 1
+
+      - run:
           name: Install codecov
           command: pip install codecov
 
