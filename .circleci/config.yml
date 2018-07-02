@@ -21,6 +21,7 @@ jobs:
             if [ -z "$GCLOUD_SERVICE_KEY" ]; then
               echo "exiting as there are no GCloud secrets"
               exit 1
+            fi
 
       - run:
           name: Install codecov
