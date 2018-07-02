@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import withRoot from "../pages/withRoot";
 import AppBar from "./AppBar";
-import {ProfileButtonWithProfile} from "./ProfileButton";
 import MotdBanner from "./MotdBanner";
+import ProfileButtonContainer from "../containers/ProfileButtonContainer";
 
 /**
  * A top level component that wraps all pages to give then elements common to all page, the ``AppBar``
@@ -17,7 +17,7 @@ const Page = (
 ) => (
       <div className={ classes.page }>
         <AppBar position="fixed" defaultSearch={defaultSearch}>
-          <ProfileButtonWithProfile variant="flat" color="inherit" />
+          <ProfileButtonContainer variant="flat" color="inherit" />
         </AppBar>
 
         <div className={classes.body}>

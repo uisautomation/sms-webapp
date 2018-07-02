@@ -139,7 +139,7 @@ class Video(Resource):
         return parse_custom_field('media', field)
 
     @classmethod
-    def from_key(cls, key, client=None):
+    def from_key(cls, key):
         """
         Return a :py:class:`Video` instance corresponding to the JWPlatform key passed.
 
@@ -245,19 +245,21 @@ class DeliveryVideo(Resource):
         return [acl.strip() for acl in field.split(',') if acl.strip() != '']
 
     @classmethod
-    def from_key(cls, key, client=None):
+    def from_key(cls, key, session=None):
         """
         Return a :py:class:`DeliveryVideo` instance corresponding to the JWPlatform key passed.
 
         :param key: JWPlatform key for the media.
-        :param client: (optional) an authenticated JWPlatform client as returned by
-            :py:func:`.get_jwplatform_client`. If ``None``, call :py:func:`.get_jwplatform_client`.
+        :param session: (optional) session used for making HTTP requests, if None, then a default
+        is used.
 
         :raises: :py:exc:`VideoNotFoundError` if the video is not found.
 
         """
+        session = session if session is not None else DEFAULT_REQUESTS_SESSION
+
         # Fetch the media download information from JWPlatform.
-        response = DEFAULT_REQUESTS_SESSION.get(
+        response = session.get(
             pd_api_url(f'/v2/media/{key}', format='json'), timeout=5
         )
 
@@ -278,7 +280,6 @@ class DeliveryVideo(Resource):
 
         item = body['playlist'][0]
 
-        # TODO either do this or customise id & published_at_timestamp in MediaSerializer
         item['key'] = item.get('mediaid')
         item['date'] = item.get('pubdate')
 

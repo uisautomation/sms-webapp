@@ -25,9 +25,9 @@ class ViewsTestCase(TestCase):
         mock_get.return_value = response
 
         # test
-        r = self.client.get(reverse('ui:media', kwargs={'media_key': 'XYZ123'}))
+        r = self.client.get(reverse('ui:media_item', kwargs={'media_key': 'XYZ123'}))
 
-        mock_get.assert_called_with(settings.MEDIA_API_URL + 'media/XYZ123')
+        mock_get.assert_called_with(settings.MEDIA_API_URL + '/media/XYZ123')
         self.assertEqual(r.status_code, 200)
         self.assertTemplateUsed(r, 'ui/media.html')
         self.assertIs(r.context['media_item_json'], media_item_json)
@@ -42,7 +42,7 @@ class ViewsTestCase(TestCase):
         mock_get.return_value = response
 
         # test
-        r = self.client.get(reverse('ui:media', kwargs={'media_key': 'XYZ123'}))
+        r = self.client.get(reverse('ui:media_item', kwargs={'media_key': 'XYZ123'}))
 
-        mock_get.assert_called_with(settings.MEDIA_API_URL + 'media/XYZ123')
+        mock_get.assert_called_with(settings.MEDIA_API_URL + '/media/XYZ123')
         self.assertEqual(r.status_code, 404)

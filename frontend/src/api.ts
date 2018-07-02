@@ -9,6 +9,9 @@
  */
 import CollectionDefaultImage from './img/collection-default-image.jpg';
 
+// The base URL for the SMS application - used to create legacy URLs.
+export const BASE_SMS_URL = 'https://sms.cam.ac.uk';
+
 /**
  * When API calls fail, the related Promise is reject()-ed with an object implementing this
  * interface.
@@ -23,7 +26,7 @@ export interface IError {
 
 /** A media download source. */
 export interface ISource {
-  type: string;
+  mime_type: string;
   url: string;
   width?: number;
   height?: number;
@@ -38,17 +41,17 @@ export interface IMediaResource {
   poster_image_url?: string;
   duration: number;
   player_url: string;
-  ui_url: string;
   source?: ISource[];
+  media_id: number;
 };
 
 /** A collection resource. */
 export interface ICollectionResource {
   id: string;
-  ui_url: string;
   title: string;
   description: string;
   poster_image_url?: string;
+  collection_id: number;
 };
 
 /** A media list response. */
@@ -163,23 +166,23 @@ const objectToQueryPart = (o: object = {}): string => {
  * MediaItemCard. If the collection has no associated image, a default one is substituted.
  */
 export const collectionResourceToItem = (
-  { ui_url, title, description, poster_image_url }: ICollectionResource
+  { collection_id, title, description, poster_image_url }: ICollectionResource
 ) => ({
   description,
   imageUrl: poster_image_url || CollectionDefaultImage,
   label: 'Collection',
   title,
-  url: ui_url,
+  url: BASE_SMS_URL + '/collection/' + collection_id,
 });
 
 /**
  * A function which maps an API media resource to a media item for use by, e.g., MediaItemCard.
  */
 export const mediaResourceToItem = (
-  { ui_url, title, description, poster_image_url }: IMediaResource
+  { id, title, description, poster_image_url }: IMediaResource
 ) => ({
   description,
   imageUrl: poster_image_url,
   title,
-  url: ui_url,
+  url: '/media/' + id,
 });

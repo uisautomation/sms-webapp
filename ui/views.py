@@ -23,7 +23,7 @@ def media(request, media_key):
     This method handles a request to render an individual media page
 
     """
-    response = DEFAULT_REQUESTS_SESSION.get(settings.MEDIA_API_URL + 'media/' + media_key)
+    response = DEFAULT_REQUESTS_SESSION.get(settings.MEDIA_API_URL + '/media/' + media_key)
 
     if not response.ok:
         return HttpResponse(status=response.status_code)

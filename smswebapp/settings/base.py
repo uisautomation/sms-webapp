@@ -222,7 +222,7 @@ FRONTEND_APP_BUILD_DIR = os.environ.get(
 )
 
 # The base url for Media API - used by the 'ui' application
-MEDIA_API_URL = 'http://localhost:8080/api/'
+MEDIA_API_URL = 'http://localhost:8080/api'
 
 # If the build directory for the frontend actually exists, serve files for the root of the
 # application from it. Print a warning otherwise.

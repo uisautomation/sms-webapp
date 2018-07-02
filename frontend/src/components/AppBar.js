@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SearchForm from './SearchForm';
 
 // The location for a redirected search request
+// TODO this is to be refactored as per https://github.com/uisautomation/sms-webapp/issues/102
 const SEARCH_LOCATION = '/';
 
 const styles = theme => ({

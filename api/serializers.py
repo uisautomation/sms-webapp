@@ -13,7 +13,7 @@ class SourceSerializer(serializers.Serializer):
     A download source for a particular media type.
 
     """
-    type = serializers.CharField(help_text="The resource's MIME type")
+    mime_type = serializers.CharField(source='type', help_text="The resource's MIME type")
     url = serializers.URLField(source='file', help_text="The resource's URL")
     width = serializers.IntegerField(help_text='The video width', required=False)
     height = serializers.IntegerField(help_text='The video height', required=False)
@@ -33,9 +33,6 @@ class MediaSerializer(serializers.Serializer):
         help_text='A URL of a thumbnail/poster image for the media'
     )
     duration = serializers.FloatField(help_text='Duration of the media in seconds')
-    ui_url = serializers.SerializerMethodField(
-        help_text='A URL for the media item. This is a URL for the media UI, not a resource URL.'
-    )
     player_url = serializers.SerializerMethodField(
         help_text='A URL to retrieve an embeddable player for the media item.'
     )
@@ -43,12 +40,10 @@ class MediaSerializer(serializers.Serializer):
         help_text='A collection of download URLs for different media types.',
         required=False, many=True
     )
-    legacy_stats_url = serializers.SerializerMethodField(
-        help_text='A URL linking to the stats page in the legacy SMS app for the media item.'
-    )
+    media_id = serializers.SerializerMethodField(help_text='Unique id for an SMS media')
 
-    def get_ui_url(self, obj):
-        return '/media/{[key]}'.format(obj)
+    def get_media_id(self, obj):
+        return obj.media_id
 
     def get_player_url(self, obj):
         return jwplatform.player_embed_url(
@@ -58,11 +53,6 @@ class MediaSerializer(serializers.Serializer):
 
     def get_poster_image_url(self, obj):
         return obj.get_poster_url()
-
-    def get_legacy_stats_url(self, obj):
-        if not obj.media_id:
-            return None
-        return 'https://sms.cam.ac.uk/media/{.media_id}/statistics'.format(obj)
 
 
 class MediaListSerializer(serializers.Serializer):
@@ -111,14 +101,10 @@ class CollectionSerializer(serializers.Serializer):
     description = serializers.CharField(help_text='Description of collection')
     poster_image_url = serializers.SerializerMethodField(
         help_text='A URL of a thumbnail/poster image for the collection')
-    ui_url = serializers.SerializerMethodField(
-        help_text=(
-            'A URL for the collection. This is a URL for the collection UI, not a resource URL.'
-        )
-    )
+    collection_id = serializers.SerializerMethodField(help_text='Unique id for an SMS collection')
 
-    def get_ui_url(self, obj):
-        return 'https://sms.cam.ac.uk/collection/{.collection_id}'.format(obj)
+    def get_collection_id(self, obj):
+        return obj.collection_id
 
     def get_poster_image_url(self, obj):
         return obj.get_poster_url()

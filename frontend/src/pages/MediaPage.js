@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
+import { BASE_SMS_URL } from '../api';
 import Page from '../components/Page';
 
 /**
@@ -20,12 +21,20 @@ const MediaPage = ({ mediaItem, classes }) => (
         </Grid>
         <Grid item xs={12}>
           <Typography variant="subheading" gutterBottom>
-            <a target='_blank' className={ classes.link } href={mediaItem.bestSource.url} download>
-              Download media
-            </a>
-            <a className={ classes.link } href={mediaItem.legacy_stats_url} style={{float: 'right'}}>
-              Statistics
-            </a>
+            <Grid item xs={12}>
+                <Grid container>
+                    <Grid item xs={6}>
+                      <a target='_blank' className={ classes.link } href={mediaItem.bestSource.url} download>
+                        Download media
+                      </a>
+                    </Grid>
+                    <Grid item xs={6} style={{textAlign: 'right'}}>
+                      <a className={ classes.link } href={mediaItem.statsUrl}>
+                        Statistics
+                      </a>
+                    </Grid>
+                </Grid>
+            </Grid>
           </Typography>
         </Grid>
       </Grid>
@@ -39,12 +48,16 @@ MediaPage.propTypes = {
 
 /**
  * A higher-order component wrapper which passes the media item to its child. At the moment the media
- * item is simply resolved from global data. The wrapper also en-riches the item by selecting the best
- * download source to use.
+ * item is simply resolved from global data. The wrapper also en-riches the item by:
+ *
+ *  - selecting the best download source to use.
+ *  - creating a link to the legacy statistics page
  */
 const withMediaItem = WrappedComponent => props => {
 
   const mediaItem = window.mediaItem;
+
+  // select the best download source to use.
 
   mediaItem.bestSource = null;
 
@@ -54,8 +67,8 @@ const withMediaItem = WrappedComponent => props => {
       mediaItem.bestSource = mediaItem.sources[i];
     }
 
-    if (mediaItem.sources[i].type === "video/mp4") {
-      if (mediaItem.bestSource.type !== mediaItem.sources[i].type) {
+    if (mediaItem.sources[i].mime_type === "video/mp4") {
+      if (mediaItem.bestSource.mime_type !== mediaItem.sources[i].mime_type) {
         mediaItem.bestSource = mediaItem.sources[i];
       }
       if (mediaItem.bestSource.height < mediaItem.sources[i].height) {
@@ -63,6 +76,10 @@ const withMediaItem = WrappedComponent => props => {
       }
     }
   }
+
+  // create a link to the legacy statistics page
+
+  mediaItem.statsUrl = BASE_SMS_URL + '/media/' + mediaItem.media_id + '/statistics';
 
   return (<WrappedComponent mediaItem={mediaItem} {...props} />);
 };

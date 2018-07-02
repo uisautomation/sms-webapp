@@ -166,7 +166,7 @@ class MediaViewTestCase(ViewTestCase):
             response.data['poster_image_url'], 'https://cdn.jwplayer.com/thumbs/mock1-720.jpg'
         )
         self.assertEqual(response.data['duration'], 54.0)
-        self.assertEqual(response.data['ui_url'], '/media/mock1')
+        self.assertEqual(response.data['media_id'], '1234')
         self.assertTrue(response.data['player_url'].startswith(
             'https://content.jwplatform.com/players/mock1-someplayer.html'
         ))
@@ -226,6 +226,7 @@ DELIVERY_VIDEO_FIXTURE = {
     'date': 1234567,
     'duration': 54,
     'sms_acl': 'acl:WORLD:',
+    'sms_media_id': 'media:1234:',
 }
 
 
