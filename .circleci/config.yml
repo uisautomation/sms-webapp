@@ -51,10 +51,6 @@ jobs:
             ./compose.sh tox down
 
       - run:
-          name: Tag production container
-          command: |
-
-      - run:
           name: Tag & Push docker image
           command: |
             if [ ! -z "$GCLOUD_SERVICE_KEY" ]; then
