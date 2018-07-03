@@ -55,7 +55,6 @@ jobs:
           command: |
             if [ ! -z "$GCLOUD_SERVICE_KEY" ]; then
               docker tag production:latest eu.gcr.io/$GCLOUD_PROJECT/$CIRCLE_PROJECT_REPONAME:sha-$CIRCLE_SHA1
-              docker tag production:latest eu.gcr.io/$GCLOUD_PROJECT/$CIRCLE_PROJECT_REPONAME:branch-$CIRCLE_BRANCH
               docker tag production:latest eu.gcr.io/$GCLOUD_PROJECT/$CIRCLE_PROJECT_REPONAME:build-$CIRCLE_BUILD_NUM
 
               echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
@@ -65,7 +64,6 @@ jobs:
               docker login -u _json_key --password-stdin https://eu.gcr.io < ${HOME}/gcloud-service-key.json
 
               docker push eu.gcr.io/$GCLOUD_PROJECT/$CIRCLE_PROJECT_REPONAME:sha-$CIRCLE_SHA1
-              docker push eu.gcr.io/$GCLOUD_PROJECT/$CIRCLE_PROJECT_REPONAME:branch-$CIRCLE_BRANCH
               docker push eu.gcr.io/$GCLOUD_PROJECT/$CIRCLE_PROJECT_REPONAME:build-$CIRCLE_BUILD_NUM
             else
               echo "Skipping push step as there are no GCloud secrets"

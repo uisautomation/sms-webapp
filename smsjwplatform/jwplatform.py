@@ -115,7 +115,7 @@ class Resource(dict):
         raise ResourceACLPermissionDenied()
 
     def get_poster_url(self, width=720):
-        return 'https://cdn.jwplayer.com/thumbs/{key}-{width}.jpg'.format(
+        return settings.JWPLATFORM_API_BASE_URL + 'thumbs/{key}-{width}.jpg'.format(
             key=self.key, width=width)
 
 

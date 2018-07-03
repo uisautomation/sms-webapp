@@ -33,7 +33,4 @@ const ProfileButton = ({ profile, ...otherProps }) => {
   );
 };
 
-const ProfileButtonWithProfile = withProfile(ProfileButton);
-
-export { ProfileButtonWithProfile };
 export default ProfileButton;
