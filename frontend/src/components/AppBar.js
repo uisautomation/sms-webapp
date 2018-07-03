@@ -9,6 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import SearchForm from './SearchForm';
 
+import ShieldImage from '../img/shield.svg';
+
 // The location for a redirected search request
 // TODO this is to be refactored as per https://github.com/uisautomation/sms-webapp/issues/102
 const SEARCH_LOCATION = '/';
@@ -24,11 +26,6 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
-  },
-
-  homeLink: {
-    color: 'white',
-    textDecoration: 'none',
   },
 
   appBarMiddle: {
@@ -76,7 +73,7 @@ const AppBar = (
     <Grid container component={Toolbar}>
       <Grid item xs={3} className={classes.appBarLeft}>
         <Typography variant="title" color="inherit">
-          <a className={classes.homeLink} href='/'>University Media Platform</a>
+          <img src={ShieldImage} alt="University Media Platform" style={{verticalAlign: 'bottom', height: '1.8em'}} />
         </Typography>
       </Grid>
       <Grid item xs={12} sm={9} md={6} className={classes.appBarMiddle}>
