@@ -1,38 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-
-    <link rel="shortcut icon" href="/favicon.png">
-
-    <title>{{ title }}</title>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="media"></div>
-
-  <!-- Polyfill for IE11, etc. -->
-  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-
-  <!-- Warn users about old browsers -->
-  <script>
-  var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,unsupported:true,api:2018.05 };
-  function $buo_f(){
-   var e = document.createElement("script");
-   e.src = "//browser-update.org/update.min.js";
-   document.body.appendChild(e);
-  };
-  try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
-  catch(e){window.attachEvent("onload", $buo_f)}
-  </script>
-
-  <script>
-      window.mediaItem = {% autoescape off %}{{ media_item_json }}{% endautoescape %};
-  </script>
-  <script type="text/javascript" src="/static/js/bundle.js"></script></body>
-</html>
+{% extends 'index.html' %}
+{% block title %}{{title}}{% endblock %}
+{% block page_name %}media{% endblock %}
+{% block custom_script %}
+  window.mediaItem = {% autoescape off %}{{ media_item_json }}{% endautoescape %};
+{% endblock %}
