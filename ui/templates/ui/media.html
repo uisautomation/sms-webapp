@@ -8,7 +8,7 @@
 
     <link rel="shortcut icon" href="/favicon.png">
 
-    <title>{{ media_item.title }}</title>
+    <title>{{ title }}</title>
   </head>
   <body>
     <noscript>
@@ -32,7 +32,7 @@
   </script>
 
   <script>
-      window.mediaItem = JSON.parse('{{ media_item_json | escapejs }}');
+      window.mediaItem = {% autoescape off %}{{ media_item_json }}{% endautoescape %};
   </script>
   <script type="text/javascript" src="/static/js/bundle.js"></script></body>
 </html>

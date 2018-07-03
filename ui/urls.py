@@ -20,5 +20,5 @@ from . import views
 app_name = 'ui'
 
 urlpatterns = [
-    path('media/<media_key>', views.media, name='media_item'),
+    path('media/<media_key>', views.MediaView.as_view(), name='media_item'),
 ]
