@@ -21,6 +21,10 @@ Models
 .. automodule:: smsjwplatform.models
     :members:
 
+.. automodule:: jwplatform.models
+    :members:
+    :member-order: bysource
+
 
 Management commands
 -------------------
