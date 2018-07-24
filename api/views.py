@@ -13,6 +13,7 @@ from rest_framework.exceptions import APIException, PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from legacysms.models import MediaStatsByDay
 from smsjwplatform import jwplatform
 from smsjwplatform.jwplatform import VideoNotFoundError
 from smsjwplatform.models import CachedResource
@@ -182,17 +183,41 @@ class MediaView(APIView):
     )
     def get(self, request, media_key):
         """Handle GET request."""
+        media_item = get_media(request.user, media_key)
+        return Response(serializers.MediaSerializer(media_item).data)
 
-        try:
-            video = jwplatform.DeliveryVideo.from_key(media_key)
-        except VideoNotFoundError:
-            # if we don't find a video raise a 404
-            raise Http404
 
-        if not user_can_view_resource(request.user, video):
-            raise PermissionDenied
+class MediaAnalyticsView(APIView):
+    """
+    Endpoint to retrieve the analytics for a single media item.
 
-        return Response(serializers.MediaSerializer(video).data)
+    """
+    @swagger_auto_schema(
+        responses={200: serializers.MediaAnalyticsSerializer()}
+    )
+    def get(self, request, media_key):
+        """Handle GET request."""
+        media_item = get_media(request.user, media_key)
+        analytics = MediaStatsByDay.objects.filter(media_id=media_item.media_id)
+        return Response(serializers.MediaAnalyticsSerializer(analytics, many=True).data)
+
+
+def get_media(user, media_key):
+    """
+    Gets a media item from JW and raises the appropriate error if the item doesn't exist or the
+    user isn't permitted to view the item.
+    """
+
+    try:
+        video = jwplatform.DeliveryVideo.from_key(media_key)
+    except VideoNotFoundError:
+        # if we don't find a video raise a 404
+        raise Http404
+
+    if not user_can_view_resource(user, video):
+        raise PermissionDenied
+
+    return video
 
 
 def user_can_view_resource(user, resource):

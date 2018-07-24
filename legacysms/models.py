@@ -48,3 +48,26 @@ class Collection(models.Model):
 
     def __str__(self):
         return 'Legacy SMS collection {}'.format(self.id)
+
+
+class MediaStatsByDay(models.Model):
+    """A model representing an number of views of a legacy media item on a particular day."""
+
+    media_id = models.BigIntegerField(primary_key=True)
+    day = models.DateField()
+    clip_id = models.BigIntegerField(blank=True, null=True)
+    is_rtsp = models.BooleanField()
+    is_itunes = models.BooleanField()
+    collection_id = models.BigIntegerField(blank=True, null=True)
+    instid = models.TextField(blank=True, null=True)
+    format = models.TextField(blank=True, null=True)
+    quality = models.TextField(blank=True, null=True)
+    fetch_type = models.TextField(blank=True, null=True)
+    is_cam = models.BooleanField()
+    country = models.TextField(blank=True, null=True)
+    num_hits = models.BigIntegerField()
+    num_bytes = models.BigIntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'media_stats_by_day'

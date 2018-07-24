@@ -1,3 +1,4 @@
+import datetime
 from unittest import mock
 
 from django.contrib.auth import get_user_model
@@ -5,6 +6,7 @@ from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 import smsjwplatform.jwplatform as api
+from legacysms.models import MediaStatsByDay
 from smsjwplatform.models import CachedResource
 
 from .. import views
@@ -192,6 +194,33 @@ class MediaViewTestCase(ViewTestCase):
         response = self.view(self.get_request, 'XYZ123')
 
         self.assertEqual(response.status_code, 403)
+
+
+class MediaAnalyticsViewCase(ViewTestCase):
+
+    @mock.patch('smsjwplatform.jwplatform.DeliveryVideo.from_key')
+    @mock.patch('legacysms.models.MediaStatsByDay.objects.filter')
+    def test_success(self, mock_filter, mock_from_id):
+        """Check that analytics for a media item is returned"""
+
+        mock_filter.return_value = [
+            MediaStatsByDay(day=datetime.date(2018, 5, 17), num_hits=3),
+            MediaStatsByDay(day=datetime.date(2018, 3, 22), num_hits=4),
+        ]
+        mock_from_id.return_value = api.DeliveryVideo(DELIVERY_VIDEO_FIXTURE)
+
+        # test
+        response = views.MediaAnalyticsView().as_view()(self.get_request, 'XYZ123')
+
+        mock_from_id.assert_called_with('XYZ123')
+        mock_filter.assert_called_with(media_id='1234')
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.data[0]['date'], '2018-05-17')
+        self.assertEqual(response.data[0]['views'], 3)
+        self.assertEqual(response.data[1]['date'], '2018-03-22')
+        self.assertEqual(response.data[1]['views'], 4)
 
 
 CHANNELS_FIXTURE = [

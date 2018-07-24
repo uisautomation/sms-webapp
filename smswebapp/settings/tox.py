@@ -45,3 +45,6 @@ OAUTH2_LOOKUP_SCOPES = 'not-a-lookup-scope'
 
 #: Be less verbose in logging with tox
 LOGGING = None
+
+# this attribute (required for 'stats' schema input causes problems for test database creation)
+DATABASES['default'].pop('OPTIONS')  # noqa: F405

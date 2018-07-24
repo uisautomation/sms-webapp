@@ -93,6 +93,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'OPTIONS': {
+            # required for the legacy statistics schema
+            'options': '-c search_path=stats'
+        }
     }
 }
 

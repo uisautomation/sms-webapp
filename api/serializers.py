@@ -91,6 +91,15 @@ class MediaListQuerySerializer(serializers.Serializer):
     )
 
 
+class MediaAnalyticsSerializer(serializers.Serializer):
+    """
+    The number of viewing for a particular media item on a particular day.
+
+    """
+    date = serializers.DateField(source='day')
+    views = serializers.IntegerField(source='num_hits')
+
+
 class CollectionSerializer(serializers.Serializer):
     """
     An individual collection.
