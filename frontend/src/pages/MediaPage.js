@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
-import { BASE_SMS_URL } from '../api';
 import Page from '../components/Page';
 import RenderedMarkdown from '../components/RenderedMarkdown';
 
@@ -35,7 +34,7 @@ const MediaPage = ({ mediaItem, classes }) => (
         </Grid>
         <Grid item xs={6} style={{textAlign: 'right'}}>
           <Typography variant="subheading">
-            <a className={ classes.link } href={mediaItem.statsUrl}>
+            <a className={ classes.link } href='./analytics'>
               Statistics
             </a>
           </Typography>
@@ -79,10 +78,6 @@ const withMediaItem = WrappedComponent => props => {
       }
     }
   }
-
-  // create a link to the legacy statistics page
-
-  mediaItem.statsUrl = BASE_SMS_URL + '/media/' + mediaItem.media_id + '/statistics';
 
   return (<WrappedComponent mediaItem={mediaItem} {...props} />);
 };

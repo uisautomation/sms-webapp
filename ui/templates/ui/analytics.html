@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <style>
+      #chart_div_AnnotationChart_zoomControlContainer_1-hour,
+      #chart_div_AnnotationChart_zoomControlContainer_1-day,
+      #chart_div_AnnotationChart_zoomControlContainer_5-days {
+        display: none;
+      }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type='text/javascript'>
+      google.charts.load('current', {'packages':['annotationchart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      var analytics_json = {% autoescape off %}{{ analytics_json }}{% endautoescape %};
+
+      var rows = [];
+
+      for (var i = 0; i < analytics_json.length; i ++) {
+        var date = analytics_json[i].date.split('-');
+        rows.push([new Date(parseInt(date[0]), parseInt(date[1]), parseInt(date[2])), analytics_json[i].views]);
+      }
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Views');
+        data.addRows(rows);
+
+        var chart = new google.visualization.AnnotationChart(document.getElementById('chart_div'));
+
+        var options = {
+          fill: 100,
+          displayAnnotations: false
+        };
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id='chart_div' style='width: 900px; height: 500px;'></div>
+  </body>
+</html>
