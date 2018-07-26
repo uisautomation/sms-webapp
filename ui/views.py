@@ -62,7 +62,7 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
         day_count = (max_date - min_date).days + 1
 
         analytics = [
-            {"date": date.strftime('%Y-%m-%d'), "views": summed_by_date.get(date, 0)}
+            {"date": date.timestamp(), "views": summed_by_date.get(date, 0)}
             # Note we also add a zero data-point at either end of the data which makes the graph
             # look better in case of a single data-point.
             for date in (min_date + datetime.timedelta(n) for n in range(-1, day_count + 1))

@@ -17,8 +17,7 @@
       var rows = [];
 
       for (var i = 0; i < analytics_json.length; i ++) {
-        var date = analytics_json[i].date.split('-');
-        rows.push([new Date(parseInt(date[0]), parseInt(date[1]), parseInt(date[2])), analytics_json[i].views]);
+        rows.push([new Date(analytics_json[i].date * 1000), analytics_json[i].views]);
       }
 
       function drawChart() {
