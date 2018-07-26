@@ -77,20 +77,25 @@ class MediaAnalyticsViewTestCase(TestCase):
         self.assertTemplateUsed(r, 'ui/analytics.html')
         analytics_json = json.loads(r.context['analytics_json'])
         self.assertEqual(len(analytics_json), 29)
-        self.assertEqual(analytics_json[0]['date'], '2018-03-21')
-        self.assertEqual(analytics_json[0]['views'], 0)
-        self.assertEqual(analytics_json[1]['date'], '2018-03-22')
+
+        self.assertEqual(analytics_json[1]['date'], datetime.datetime(2018, 3, 22).timestamp())
         self.assertEqual(analytics_json[1]['views'], 5)
+        self.assertEqual(analytics_json[27]['date'], datetime.datetime(2018, 4, 17).timestamp())
+        self.assertEqual(analytics_json[27]['views'], 3)
+
+        # check zero added at beginning
+        self.assertEqual(analytics_json[0]['date'], datetime.datetime(2018, 3, 21).timestamp())
+        self.assertEqual(analytics_json[0]['views'], 0)
+        # check padding
         for i in range(2, 26):
             self.assertEqual(analytics_json[i]['views'], 0)
-        self.assertEqual(analytics_json[27]['date'], '2018-04-17')
-        self.assertEqual(analytics_json[27]['views'], 3)
-        self.assertEqual(analytics_json[28]['date'], '2018-04-18')
+        # check zero added at end
+        self.assertEqual(analytics_json[28]['date'], datetime.datetime(2018, 4, 18).timestamp())
         self.assertEqual(analytics_json[28]['views'], 0)
 
     @mock.patch('smsjwplatform.jwplatform.DeliveryVideo.from_key')
     @mock.patch('legacysms.models.MediaStatsByDay.objects.filter')
-    def test_success(self, mock_filter, mock_from_id):
+    def test_no_analytics(self, mock_filter, mock_from_id):
         """checks that a media item with no analytics is handled correctly"""
 
         mock_filter.return_value = []

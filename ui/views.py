@@ -46,7 +46,8 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
         max_date = datetime.datetime.min
         summed_by_date = {}
 
-        # Here we sum up all views for a particular day and calculate the min and max dates.
+        # Here we sum up all views for a particular day (irrespective of other variable) and
+        # calculate the min and max dates.
         for item in response.data:
             date = datetime.datetime.strptime(item['date'], '%Y-%m-%d')
             views = summed_by_date.get(date, 0)
@@ -59,6 +60,7 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
             return Response({'analytics_json': json.dumps([])})
 
         # Here we provide an ordered list of the views fill out missing days with zero views.
+
         day_count = (max_date - min_date).days + 1
 
         analytics = [

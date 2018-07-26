@@ -51,8 +51,11 @@ class Collection(models.Model):
 
 
 class MediaStatsByDay(models.Model):
-    """A model representing an number of views of a legacy media item on a particular day."""
+    """
+    A model representing an number of views of a legacy media item on a particular day
+    (also cut by a number of other variables (country, format, etc).
 
+    """
     media_id = models.BigIntegerField(primary_key=True)
     day = models.DateField()
     clip_id = models.BigIntegerField(blank=True, null=True)
