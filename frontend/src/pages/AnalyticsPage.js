@@ -46,13 +46,15 @@ class AnalyticsPage extends Component {
               <Typography variant="headline" component="div">
                 Viewing history (views per day)
               </Typography>
-            <Grid item xs={12}>
-              <Chart
+            <Grid item xs={12}>{
+              chartData.length > 1 ? <Chart
                 chartType="AnnotationChart"
                 data={chartData}
                 options={{fill: 100, colors: ['#EF2E31']}}
-              />
-            </Grid>
+              /> : <Typography variant="subheading">
+                There is no data available for the media
+              </Typography>
+            }</Grid>
             <Grid item xs={12}>
               <Typography variant="headline" component="div">
                 { mediaItemResponse && mediaItemResponse.title }
@@ -90,9 +92,9 @@ AnalyticsPage.propTypes = {
  */
 const withChartData = WrappedComponent => props => {
 
-  var chartData = [["Date", "Views"]];
+  const chartData = [["Date", "Views"]];
 
-  for (var i = 0; i < window.mediaItemAnalytics.length; i ++) {
+  for (let i = 0; i < window.mediaItemAnalytics.length; i ++) {
     chartData.push(
       [new Date(window.mediaItemAnalytics[i].date * 1000), window.mediaItemAnalytics[i].views]
     );
