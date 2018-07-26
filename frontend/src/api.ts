@@ -159,6 +159,11 @@ export const mediaList = (
   return apiFetch(API_ENDPOINTS.mediaList + objectToQueryPart({ search }));
 };
 
+/** Get a media item. */
+export const mediaGet = (id: String): Promise<IMediaResource | IError> => {
+  return apiFetch(API_ENDPOINTS.mediaList + id);
+};
+
 /** List collection resources. */
 export const collectionList = (
   { search }: IMediaQuery = {}
@@ -167,7 +172,7 @@ export const collectionList = (
 };
 
 /** Fetch the user's profile. */
-export const profileGet= (): Promise<IProfileResponse | IError> => {
+export const profileGet = (): Promise<IProfileResponse | IError> => {
   return apiFetch(API_ENDPOINTS.profile);
 }
 

@@ -1,19 +1,4 @@
 {% extends 'index.html' %}
-{% block extra_head %}
-  <style>
-    /* Hide the useless displayZoomButtons */
-    #reactgooglegraph-1_AnnotationChart_zoomControlContainer_1-hour,
-    #reactgooglegraph-1_AnnotationChart_zoomControlContainer_1-day,
-    #reactgooglegraph-1_AnnotationChart_zoomControlContainer_5-days {
-      display: none;
-    }
-    /* Correct the legend & zoomControls font */
-    .google-visualization-atl .legend,
-    .google-visualization-atl .zoomControls {
-      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    }
-  </style>
-{% endblock %}
 {% block custom_script %}
   window.mediaItemAnalytics = {% autoescape off %}{{ analytics_json }}{% endautoescape %};
 {% endblock %}
