@@ -93,6 +93,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    # this DB is used for queries for tables in the stats schema
+    'stats': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'OPTIONS': {
             # required for the legacy statistics schema
             'options': '-c search_path=stats'
@@ -100,6 +105,8 @@ DATABASES = {
     }
 }
 
+# a router is required to route queries for tables in the stats schema
+DATABASE_ROUTERS = ['legacysms.routers.StatsSchemaRouter']
 
 _db_envvar_prefix = 'DJANGO_DB_'
 for name, value in os.environ.items():
@@ -111,7 +118,8 @@ for name, value in os.environ.items():
     name = name[len(_db_envvar_prefix):]
 
     # Set value
-    DATABASES['default'][name] = value
+    for db in DATABASES.keys():
+        DATABASES[db][name] = value
 
 
 #: Password validation
