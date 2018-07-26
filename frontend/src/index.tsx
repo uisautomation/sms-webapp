@@ -5,9 +5,9 @@ import * as ReactDOM from 'react-dom';
 
 import { BrowserRouter, Route } from 'react-router-dom'
 
+import AnalyticsPage from './pages/AnalyticsPage';
 import IndexPage from './pages/IndexPage';
 import MediaPage from './pages/MediaPage';
-import AnalyticsPage from './pages/AnalyticsPage';
 
 ReactDOM.render(
   <BrowserRouter>

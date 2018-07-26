@@ -160,7 +160,7 @@ export const mediaList = (
 };
 
 /** Get a media item. */
-export const mediaGet = (id: String): Promise<IMediaResource | IError> => {
+export const mediaGet = (id: string): Promise<IMediaResource | IError> => {
   return apiFetch(API_ENDPOINTS.mediaList + id);
 };
 

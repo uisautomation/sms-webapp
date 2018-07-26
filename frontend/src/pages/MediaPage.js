@@ -45,8 +45,8 @@ const MediaPage = ({ mediaItem, classes }) => (
 );
 
 MediaPage.propTypes = {
-  mediaItem: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
+  mediaItem: PropTypes.object.isRequired,
 };
 
 /**
