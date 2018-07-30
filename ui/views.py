@@ -2,10 +2,12 @@
 Views
 
 """
+import copy
 import datetime
 import json
 import logging
 
+from django.urls import reverse
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
@@ -24,7 +26,11 @@ class MediaView(api.views.MediaView):
     def get(self, request, media_key):
 
         response = super().get(request, media_key)
-        response.data['media_item_json'] = json.dumps(response.data)
+
+        media_item = copy.copy(response.data)
+        media_item['statsUrl'] = reverse('ui:media_item_analytics', args=[media_key])
+
+        response.data['media_item_json'] = json.dumps(media_item)
         return response
 
 

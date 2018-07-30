@@ -141,4 +141,5 @@ This dump can be downloaded and imported to the development app using the
 ./compose.sh development exec development_app /tmp/copy-legacy-stats.sh <stats_url>
 ```
 
-(the stats url can be discovered [here](https://github.com/uisautomation/media-deploy/blob/master/deployment/deployment.py))
+(the stats url can be discovered in the 
+[main deployment template of the media project's deployment repository](https://github.com/uisautomation/media-deploy/blob/master/deployment/deployment.py))

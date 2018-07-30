@@ -39,22 +39,32 @@ class AnalyticsPage extends Component {
     const statsUrl = mediaItemResponse ?
       BASE_SMS_URL + '/media/' + mediaItemResponse.media_id + '/statistics' : null;
 
+    let chart = <Typography variant="subheading">
+      There is no data available for the media
+    </Typography>;
+
+    if (chartData.length > 1) {
+      chart = (
+        <Typography variant='body1' component='div' className={ classes.chartContainer }>
+          <Chart
+            chartType="AnnotationChart"
+            data={chartData}
+            options={{fill: 100, colors: ['#EF2E31']}}
+          />
+        </Typography>
+      );
+    }
+
     return (
       <Page>
         <section>
           <Grid container spacing={16} className={ classes.gridContainer }>
+            <Grid item xs={12}>
               <Typography variant="headline" component="div">
                 Viewing history (views per day)
               </Typography>
-            <Grid item xs={12}>{
-              chartData.length > 1 ? <Chart
-                chartType="AnnotationChart"
-                data={chartData}
-                options={{fill: 100, colors: ['#EF2E31']}}
-              /> : <Typography variant="subheading">
-                There is no data available for the media
-              </Typography>
-            }</Grid>
+            </Grid>
+            <Grid item xs={12}>{ chart }</Grid>
             <Grid item xs={12}>
               <Typography variant="headline" component="div">
                 { mediaItemResponse && mediaItemResponse.title }
@@ -104,11 +114,33 @@ const withChartData = WrappedComponent => props => {
 };
 
 /* tslint:disable object-literal-sort-keys */
-var styles = theme => ({
+var styles = _ => ({
   gridContainer: {
     maxWidth: 1260,
     margin: '0 auto'
   },
+  chartContainer: {
+    /* Missing bottom border */
+    '& .rangeControl': {
+      borderBottom: [['1px', '#888888', 'solid']]
+    },
+    /**
+     * Hide the useless displayZoomButtons
+     *
+     * HACK: it is noted here that this approach is brittle - keep an eye on Google Charts in case
+     * they provide a way of configuring these buttons in the future (alternatively we could make
+     * our own buttons using setVisibleChartRange()).
+     */
+    '& #reactgooglegraph-1_AnnotationChart_zoomControlContainer_1-hour': {
+      display: 'none'
+    },
+    '& #reactgooglegraph-1_AnnotationChart_zoomControlContainer_1-day': {
+      display: 'none'
+    },
+    '& #reactgooglegraph-1_AnnotationChart_zoomControlContainer_5-days': {
+      display: 'none'
+    },
+  }
 });
 /* tslint:enable */
 

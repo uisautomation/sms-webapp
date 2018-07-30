@@ -34,7 +34,7 @@ const MediaPage = ({ mediaItem, classes }) => (
         </Grid>
         <Grid item xs={6} style={{textAlign: 'right'}}>
           <Typography variant="subheading">
-            <a className={ classes.link } href='./analytics'>
+            <a className={ classes.link } href={mediaItem.statsUrl}>
               Statistics
             </a>
           </Typography>
@@ -54,7 +54,6 @@ MediaPage.propTypes = {
  * item is simply resolved from global data. The wrapper also en-riches the item by:
  *
  *  - selecting the best download source to use.
- *  - creating a link to the legacy statistics page
  */
 const withMediaItem = WrappedComponent => props => {
 
