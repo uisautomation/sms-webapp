@@ -101,13 +101,47 @@ const withChartData = WrappedComponent => props => {
 
   const chartData = [["Date", "Views"]];
 
-  for (let i = 0; i < window.mediaItemAnalytics.length; i ++) {
-    chartData.push(
-      [new Date(window.mediaItemAnalytics[i].date * 1000), window.mediaItemAnalytics[i].views]
-    );
+  let minDate = new Date("9999-12-31");
+  let maxDate = new Date("0000-01-01");
+
+  const summedByDate = {};
+
+  if (window.mediaItemAnalytics.length > 0) {
+    // Here we sum up all views for a particular day (irrespective of other variable) and
+    // calculate the min and max dates.
+    for (let i = 0; i < window.mediaItemAnalytics.length; i ++) {
+      const date = new Date(window.mediaItemAnalytics[i]['date']);
+      const views = date in summedByDate ? summedByDate[date] : 0;
+      summedByDate[date] = views + window.mediaItemAnalytics[i]['views'];
+      minDate = Math.min(minDate, date);
+      maxDate = Math.max(maxDate, date);
+    }
+
+    // Here we provide an ordered list of the views fill out missing days with zero views.
+
+    // Note we also add a zero data-point at either end of the data which makes the graph
+    // look better in case of a single data-point.
+    maxDate = addDays(new Date(maxDate), 1);
+    let date = addDays(new Date(minDate), -1);
+
+    while (date <= maxDate) {
+      chartData.push(
+        [date, date in summedByDate ? summedByDate[date] : 0]
+      );
+      date = addDays(date, 1);
+    }
   }
 
   return (<WrappedComponent chartData={chartData} {...props} />);
+};
+
+/**
+ * A helper function to return a new date displaced from a given date by given number of days.
+ */
+const addDays = (date, days) => {
+    const result = new Date(date.valueOf());
+    result.setUTCDate(result.getUTCDate() + days);
+    return result;
 };
 
 /* tslint:disable object-literal-sort-keys */

@@ -44,7 +44,10 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
     def get(self, request, pk):
 
         response = super().get(request, pk)
+        return Response({'analytics_json': json.dumps(response.data)})
 
+
+"""
         min_date = datetime.datetime.max
         max_date = datetime.datetime.min
         summed_by_date = {}
@@ -72,5 +75,4 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
             # look better in case of a single data-point.
             for date in (min_date + datetime.timedelta(n) for n in range(-1, day_count + 1))
         ]
-
-        return Response({'analytics_json': json.dumps(analytics)})
+"""
