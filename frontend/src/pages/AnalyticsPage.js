@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 import {Chart} from "react-google-charts";
-import { BASE_SMS_URL } from '../api';
 import Page from "../components/Page";
 import Grid from '@material-ui/core/Grid';
 import {mediaGet} from "../api";
@@ -36,8 +35,6 @@ class AnalyticsPage extends Component {
   render() {
     const { mediaItemResponse } = this.state;
     const { chartData, classes, match: { params: { pk } } } = this.props;
-    const statsUrl = mediaItemResponse ?
-      BASE_SMS_URL + '/media/' + mediaItemResponse.media_id + '/statistics' : null;
 
     let chart = <Typography variant="subheading">
       There is no data available for the media
@@ -79,7 +76,7 @@ class AnalyticsPage extends Component {
             </Grid>
             <Grid item xs={6} style={{textAlign: 'right'}}>
               <Typography variant="subheading">
-                <a className={ classes.link } href={ statsUrl }>
+                <a className={ classes.link } href={ mediaItemResponse && mediaItemResponse.legacy.statisticsUrl }>
                   Legacy Statistics
                 </a>
               </Typography>

@@ -1,4 +1,6 @@
 {% extends 'index.html' %}
-{% block custom_script %}
+{% block extrabody %}
+<script>
   window.mediaItemAnalytics = {% autoescape off %}{{ analytics_json }}{% endautoescape %};
+</script>
 {% endblock %}

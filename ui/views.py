@@ -23,13 +23,10 @@ class MediaView(api.views.MediaView):
 
     template_name = 'ui/media.html'
 
-    def get(self, request, media_key):
-
-        response = super().get(request, media_key)
-
+    def get(self, request, pk):
+        response = super().get(request, pk)
         media_item = copy.copy(response.data)
-        media_item['statsUrl'] = reverse('ui:media_item_analytics', args=[media_key])
-
+        media_item['statisticsUrl'] = reverse('ui:media_item_analytics', args=[pk])
         response.data['media_item_json'] = json.dumps(media_item)
         return response
 
@@ -44,9 +41,9 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
 
     template_name = 'ui/analytics.html'
 
-    def get(self, request, media_key):
+    def get(self, request, pk):
 
-        response = super().get(request, media_key)
+        response = super().get(request, pk)
 
         min_date = datetime.datetime.max
         max_date = datetime.datetime.min
