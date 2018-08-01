@@ -5,7 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 
 import {Chart} from "react-google-charts";
 import Page from "../components/Page";
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
 import {mediaGet} from "../api";
 import Typography from '@material-ui/core/Typography';
 
@@ -36,50 +39,61 @@ class AnalyticsPage extends Component {
     const { mediaItemResponse } = this.state;
     const { chartData, classes, match: { params: { pk } } } = this.props;
 
-    let chart = <Typography variant="subheading">
-      There is no data available for the media
-    </Typography>;
-
-    if (chartData.length > 1) {
-      chart = (
-        <Typography variant='body1' component='div' className={ classes.chartContainer }>
-          <Chart
-            chartType="AnnotationChart"
-            data={chartData}
-            options={{fill: 100, colors: ['#EF2E31']}}
-          />
-        </Typography>
-      );
-    }
-
     return (
       <Page>
-        <section>
-          <Grid container spacing={16} className={ classes.gridContainer }>
+        <section className={ classes.section }>
+          <Grid container spacing={16} >
             <Grid item xs={12}>
               <Typography variant="headline" component="div">
                 Viewing history (views per day)
               </Typography>
             </Grid>
-            <Grid item xs={12}>{ chart }</Grid>
+          </Grid>
+        </section>
+        <section className={ classes.section }>
+          <div className={ classes.chartContainer }>
+            {
+              chartData.length > 1
+              ?
+              <Typography variant='body1' component='div'>
+                <Chart
+                  chartType="AnnotationChart"
+                  data={chartData}
+                  options={{fill: 100, colors: ['#EF2E31']}}
+                />
+              </Typography>
+              :
+              <Typography variant="subheading">
+                There is no data available for the media
+              </Typography>
+            }
+          </div>
+        </section>
+        <section className={ classes.section }>
+          <Grid container spacing={16}>
             <Grid item xs={12}>
               <Typography variant="headline" component="div">
-                { mediaItemResponse && mediaItemResponse.title }
+                { mediaItemResponse && mediaItemResponse.name }
               </Typography>
             </Grid>
-            <Grid item xs={6}>
-              <Typography variant="subheading">
-                <a className={ classes.link } href={'/media/' + pk}>
-                  Media Item
-                </a>
-              </Typography>
+          </Grid>
+          <Grid container justify='space-between' spacing={16}>
+            <Grid item xs={12} sm={6} md={3} lg={2}>
+              <Button
+                component='a' variant='outlined' className={ classes.link }
+                href={'/media/' + pk} fullWidth
+              >
+                Media Item
+                <ArrowUpwardIcon className={ classes.rightIcon } />
+              </Button>
             </Grid>
-            <Grid item xs={6} style={{textAlign: 'right'}}>
-              <Typography variant="subheading">
-                <a className={ classes.link } href={ mediaItemResponse && mediaItemResponse.legacy.statisticsUrl }>
-                  Legacy Statistics
-                </a>
-              </Typography>
+            <Grid item xs={12} sm={6} md={3} lg={2} style={{textAlign: 'right'}}>
+              <Button component='a' variant='outlined' className={ classes.link }
+                href={mediaItemResponse && mediaItemResponse.legacy.statisticsUrl} fullWidth
+              >
+                Legacy Statistics
+                <ShowChartIcon className={ classes.rightIcon } />
+              </Button>
             </Grid>
           </Grid>
         </section>
@@ -145,10 +159,9 @@ const addDays = (date, days) => {
 };
 
 /* tslint:disable object-literal-sort-keys */
-var styles = _ => ({
-  gridContainer: {
-    maxWidth: 1260,
-    margin: '0 auto'
+var styles = theme => ({
+  section: {
+    marginTop: theme.spacing.unit,
   },
   chartContainer: {
     /* Missing bottom border */
@@ -170,7 +183,13 @@ var styles = _ => ({
     },
     '& #reactgooglegraph-1_AnnotationChart_zoomControlContainer_5-days': {
       display: 'none'
-    },
+    }
+  },
+  link: {
+    color: theme.palette.text.secondary,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
   }
 });
 /* tslint:enable */

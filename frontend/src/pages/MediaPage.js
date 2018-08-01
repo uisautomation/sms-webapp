@@ -8,7 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 import DownloadIcon from '@material-ui/icons/CloudDownload';
 import AnalyticsIcon from '@material-ui/icons/ShowChart';
 
-import { BASE_SMS_URL } from '../api';
 import Page from '../components/Page';
 import RenderedMarkdown from '../components/RenderedMarkdown';
 
