@@ -134,31 +134,18 @@ class MediaListViewTestCase(ViewTestCase):
         force_authenticate(self.get_request, user=self.user)
         response_data = self.view(self.get_request).data
         self.assertIn('results', response_data)
-<<<<<<< HEAD
-
-        self.assertNotEqual(len(response_data['results']), 0)
-        self.assertEqual(len(response_data['results']), self.viewable_by_user.count())
-
-        expected_ids = set(o.id for o in self.viewable_by_user)
-        for item in response_data['results']:
-            self.assertIn(item['key'], expected_ids)
-=======
 
         # sanity check that the viewable lists differ
         self.assertNotEqual(self.viewable_by_user.count(), self.viewable_by_anon.count())
->>>>>>> master
 
         self.assertNotEqual(len(response_data['results']), 0)
         self.assertEqual(len(response_data['results']), self.viewable_by_user.count())
 
-<<<<<<< HEAD
-=======
         expected_ids = set(o.id for o in self.viewable_by_user)
         for item in response_data['results']:
             self.assertIn(item['key'], expected_ids)
 
 
->>>>>>> master
 class MediaViewTestCase(ViewTestCase):
     def setUp(self):
         super().setUp()
@@ -170,21 +157,13 @@ class MediaViewTestCase(ViewTestCase):
 
     def test_success(self):
         """Check that a media item is successfully returned"""
-<<<<<<< HEAD
-        mock_from_id.return_value = api.DeliveryVideo(DELIVERY_VIDEO_FIXTURE)
-=======
->>>>>>> master
         item = self.non_deleted_media.get(id='populated')
 
         # test
         response = self.view(self.get_request, pk=item.id)
         self.assertEqual(response.status_code, 200)
 
-<<<<<<< HEAD
-        mock_from_id.assert_called_with(item.jwp.key)
-=======
         self.dv_from_key.assert_called_with(item.jwp.key)
->>>>>>> master
 
         self.assertEqual(response.data['key'], item.id)
         self.assertEqual(response.data['name'], item.title)

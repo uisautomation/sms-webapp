@@ -54,10 +54,10 @@ const MediaPage = ({ mediaItem, classes }) => (
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={2} style={{textAlign: 'right'}}>
           {
-            mediaItem.legacy.statisticsUrl
+            mediaItem.statisticsUrl
             ?
             <Button component='a' variant='outlined' className={ classes.link }
-              href={mediaItem.legacy.statisticsUrl} fullWidth
+              href={mediaItem.statisticsUrl} fullWidth
             >
               Statistics
               <AnalyticsIcon className={ classes.rightIcon } />
