@@ -7,7 +7,7 @@ import logging
 
 from django.conf import settings
 from django.db import connection
-from django.http import Http404
+from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -190,14 +190,11 @@ class MediaAnalyticsView(APIView):
     def get(self, request, pk):
         """Handle GET request."""
 
-        media_item = (
+        media_item = get_object_or_404(
             mpmodels.MediaItem.objects.filter(pk=pk)
             .viewable_by_user(request.user)
-            .select_related('sms').first()
+            .select_related('sms')
         )
-
-        if not media_item:
-            raise Http404
 
         cursor = get_cursor()
         cursor.execute(
@@ -209,6 +206,6 @@ class MediaAnalyticsView(APIView):
         return Response(data)
 
 
-def get_cursor():
+def get_cursor():  # pragma: no cover
     """Retrieve DB cursor. Method included for patching in tests"""
     return connection.cursor()
