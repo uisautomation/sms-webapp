@@ -4,8 +4,10 @@ Views implementing the API endpoints.
 """
 import copy
 import logging
+from collections import namedtuple
 
 from django.conf import settings
+from django.db import connection
 from django.http import Http404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import APIException
@@ -13,7 +15,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, pagination, filters
 
-from legacysms.models import MediaStatsByDay
 from smsjwplatform import jwplatform
 import mediaplatform.models as mpmodels
 
@@ -179,6 +180,10 @@ class MediaView(generics.RetrieveAPIView):
         )
 
 
+# simple object for serialization of media_stats_by_day
+MediaStatsByDay = namedtuple('MediaStatsByDay', ('day', 'num_hits'))
+
+
 class MediaAnalyticsView(APIView):
     """
     Endpoint to retrieve the analytics for a single media item.
@@ -192,37 +197,25 @@ class MediaAnalyticsView(APIView):
 
         media_item = (
             mpmodels.MediaItem.objects.filter(pk=pk)
-            .viewable_by_user(self.request.user)
+            .viewable_by_user(request.user)
             .select_related('sms').first()
         )
 
         if not media_item:
             raise Http404
 
-        analytics = MediaStatsByDay.objects.filter(media_id=media_item.sms.id)
+        cursor = get_cursor()
+        cursor.execute(
+            "SELECT day, num_hits FROM stats.media_stats_by_day WHERE media_id=%s",
+            [media_item.sms.id]
+        )
+        analytics = [
+            MediaStatsByDay(day=item[0], num_hits=item[1]) for item in cursor.fetchall()
+        ]
+        cursor.close()
         return Response(serializers.MediaAnalyticsSerializer(analytics, many=True).data)
 
 
-# class MediaAnalyticsView(generics.ListAPIView):
-#     """
-#     Endpoint to retrieve the analytics for a single media item.
-#
-#     """
-#     queryset = MediaStatsByDay.objects
-#     serializer_class = serializers.MediaAnalyticsSerializer
-#
-#     def get_queryset(self, *args, **kwargs):
-#
-#         media_item = (
-#             mpmodels.MediaItem.objects
-#             .filter(pk=self.kwargs['pk'])
-#             .viewable_by_user(self.request.user)
-#             .select_related('sms').first()
-#         )
-#
-#         if not media_item:
-#             raise Http404
-#
-#         return (
-#             super().get_queryset().filter(media_id=media_item.sms.id)
-#         )
+def get_cursor():
+    """Retrieve DB cursor. Method included for patching in tests"""
+    return connection.cursor()

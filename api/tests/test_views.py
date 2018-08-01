@@ -190,32 +190,27 @@ class MediaViewTestCase(ViewTestCase):
 
 class MediaAnalyticsViewCase(ViewTestCase):
 
-    @mock.patch('smsjwplatform.jwplatform.DeliveryVideo.from_key')
-    @mock.patch('legacysms.models.MediaStatsByDay.objects.filter')
-    def test_success(self, mock_filter, mock_from_id):
+    @mock.patch('api.views.get_cursor')
+    def test_success(self, mock_get_cursor):
         """Check that analytics for a media item is returned"""
 
-        media_stats_by_day_1 = Mock()
-        media_stats_by_day_1.day = datetime.date(2018, 5, 17)
-        media_stats_by_day_1.num_hits = 3
-        media_stats_by_day_2 = Mock()
-        media_stats_by_day_2.day = datetime.date(2018, 3, 22)
-        media_stats_by_day_2.num_hits = 4
+        cursor = Mock()
+        cursor.fetchall.return_value = [
+            (datetime.date(2018, 5, 17), 3), (datetime.date(2018, 3, 22), 4)
+        ]
+        mock_get_cursor.return_value = cursor
 
-        mock_filter.return_value = [media_stats_by_day_1, media_stats_by_day_2]
-        mock_from_id.return_value = api.DeliveryVideo(DELIVERY_VIDEO_FIXTURE)
+        item = self.non_deleted_media.get(id='populated')
 
         # test
-        # response = views.MediaAnalyticsView().as_view()(self.get_request, pk='XYZ123')
+        response = views.MediaAnalyticsView().as_view()(self.get_request, pk=item.id)
 
-        # mock_filter.assert_called_with(media_id=1234)
-        #
-        # self.assertEqual(response.status_code, 200)
-        #
-        # self.assertEqual(response.data[0]['date'], '2018-05-17')
-        # self.assertEqual(response.data[0]['views'], 3)
-        # self.assertEqual(response.data[1]['date'], '2018-03-22')
-        # self.assertEqual(response.data[1]['views'], 4)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.data[0]['date'], '2018-05-17')
+        self.assertEqual(response.data[0]['views'], 3)
+        self.assertEqual(response.data[1]['date'], '2018-03-22')
+        self.assertEqual(response.data[1]['views'], 4)
 
 
 CHANNELS_FIXTURE = [

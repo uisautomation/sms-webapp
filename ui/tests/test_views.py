@@ -3,15 +3,13 @@ Tests for views.
 
 """
 import json
-import datetime
 from unittest import mock
+from unittest.mock import Mock
 
-from django.test import TestCase
 from django.urls import reverse
 
 import smsjwplatform.jwplatform as api
 from api.tests.test_views import ViewTestCase, DELIVERY_VIDEO_FIXTURE
-from legacysms.models import MediaStatsByDay
 
 
 class ViewsTestCase(ViewTestCase):
@@ -47,55 +45,22 @@ class ViewsTestCase(ViewTestCase):
     # TODO: add ACL checks here
 
 
-class MediaAnalyticsViewTestCase(TestCase):
+class MediaAnalyticsViewTestCase(ViewTestCase):
 
-    @mock.patch('smsjwplatform.jwplatform.DeliveryVideo.from_key')
-    @mock.patch('legacysms.models.MediaStatsByDay.objects.filter')
-    def test_success(self, mock_filter, mock_from_id):
+    @mock.patch('api.views.get_cursor')
+    def test_success(self, mock_get_cursor):
         """checks that a media item's analytics are rendered successfully"""
 
-        mock_filter.return_value = [
-            MediaStatsByDay(day=datetime.date(2018, 4, 17), num_hits=3),
-            MediaStatsByDay(day=datetime.date(2018, 3, 22), num_hits=4),
-            MediaStatsByDay(day=datetime.date(2018, 3, 22), num_hits=1),
-        ]
-        mock_from_id.return_value = api.DeliveryVideo(DELIVERY_VIDEO_FIXTURE)
+        cursor = Mock()
+        cursor.fetchall.return_value = []
+        mock_get_cursor.return_value = cursor
 
-#         # test
-#         r = self.client.get(reverse('ui:media_item_analytics', kwargs={'media_key': 'XYZ123'}))
-#
-#         self.assertEqual(r.status_code, 200)
-#         self.assertTemplateUsed(r, 'ui/analytics.html')
-#         analytics_json = json.loads(r.context['analytics_json'])
-#         self.assertEqual(len(analytics_json), 29)
-#
-#         self.assertEqual(analytics_json[1]['date'], datetime.datetime(2018, 3, 22).timestamp())
-#         self.assertEqual(analytics_json[1]['views'], 5)
-#         self.assertEqual(analytics_json[27]['date'], datetime.datetime(2018, 4, 17).timestamp())
-#         self.assertEqual(analytics_json[27]['views'], 3)
-#
-#         # check zero added at beginning
-#         self.assertEqual(analytics_json[0]['date'], datetime.datetime(2018, 3, 21).timestamp())
-#         self.assertEqual(analytics_json[0]['views'], 0)
-#         # check padding
-#         for i in range(2, 26):
-#             self.assertEqual(analytics_json[i]['views'], 0)
-#         # check zero added at end
-#         self.assertEqual(analytics_json[28]['date'], datetime.datetime(2018, 4, 18).timestamp())
-#         self.assertEqual(analytics_json[28]['views'], 0)
+        item = self.non_deleted_media.get(id='populated')
 
-    @mock.patch('smsjwplatform.jwplatform.DeliveryVideo.from_key')
-    @mock.patch('legacysms.models.MediaStatsByDay.objects.filter')
-    def test_no_analytics(self, mock_filter, mock_from_id):
-        """checks that a media item with no analytics is handled correctly"""
+        # test
+        r = self.client.get(reverse('ui:media_item_analytics', kwargs={'pk': item.pk}))
 
-        mock_filter.return_value = []
-        mock_from_id.return_value = api.DeliveryVideo(DELIVERY_VIDEO_FIXTURE)
-
-#         # test
-#         r = self.client.get(reverse('ui:media_item_analytics', kwargs={'media_key': 'XYZ123'}))
-#
-#         self.assertEqual(r.status_code, 200)
-#         self.assertTemplateUsed(r, 'ui/analytics.html')
-#         analytics_json = json.loads(r.context['analytics_json'])
-#         self.assertEqual(len(analytics_json), 0)
+        self.assertEqual(r.status_code, 200)
+        self.assertTemplateUsed(r, 'ui/analytics.html')
+        analytics_json = json.loads(r.context['analytics_json'])
+        self.assertEqual(len(analytics_json), 0)

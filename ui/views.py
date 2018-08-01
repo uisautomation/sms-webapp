@@ -3,7 +3,6 @@ Views
 
 """
 import copy
-import datetime
 import json
 import logging
 
@@ -42,37 +41,5 @@ class MediaAnalyticsView(api.views.MediaAnalyticsView):
     template_name = 'ui/analytics.html'
 
     def get(self, request, pk):
-
         response = super().get(request, pk)
         return Response({'analytics_json': json.dumps(response.data)})
-
-
-"""
-        min_date = datetime.datetime.max
-        max_date = datetime.datetime.min
-        summed_by_date = {}
-
-        # Here we sum up all views for a particular day (irrespective of other variable) and
-        # calculate the min and max dates.
-        for item in response.data:
-            date = datetime.datetime.strptime(item['date'], '%Y-%m-%d')
-            views = summed_by_date.get(date, 0)
-            summed_by_date[date] = views + item['views']
-            min_date = min(min_date, date)
-            max_date = max(max_date, date)
-
-        if not summed_by_date:
-            # the media has had no views
-            return Response({'analytics_json': json.dumps([])})
-
-        # Here we provide an ordered list of the views fill out missing days with zero views.
-
-        day_count = (max_date - min_date).days + 1
-
-        analytics = [
-            {"date": date.timestamp(), "views": summed_by_date.get(date, 0)}
-            # Note we also add a zero data-point at either end of the data which makes the graph
-            # look better in case of a single data-point.
-            for date in (min_date + datetime.timedelta(n) for n in range(-1, day_count + 1))
-        ]
-"""
