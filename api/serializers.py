@@ -150,15 +150,6 @@ class MediaDetailSerializer(MediaSerializer):
         return data
 
 
-class MediaAnalyticsSerializer(serializers.Serializer):
-    """
-    The number of viewing for a particular media item on a particular day.
-
-    """
-    date = serializers.DateField(source='day')
-    views = serializers.IntegerField(source='num_hits')
-
-
 class CollectionSerializer(serializers.Serializer):
     """
     An individual collection.
@@ -208,3 +199,12 @@ class ProfileSerializer(serializers.Serializer):
     is_anonymous = serializers.BooleanField(source='user.is_anonymous')
     username = serializers.CharField(source='user.username')
     urls = serializers.DictField()
+
+
+class MediaAnalyticsSerializer(serializers.Serializer):
+    """
+    The number of viewing for a particular media item on a particular day.
+
+    """
+    date = serializers.DateField(source='day')
+    views = serializers.IntegerField(source='num_hits')

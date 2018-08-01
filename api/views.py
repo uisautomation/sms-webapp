@@ -179,7 +179,6 @@ class MediaView(generics.RetrieveAPIView):
             .select_related('sms')
         )
 
-
 # simple object for serialization of media_stats_by_day
 MediaStatsByDay = namedtuple('MediaStatsByDay', ('day', 'num_hits'))
 
