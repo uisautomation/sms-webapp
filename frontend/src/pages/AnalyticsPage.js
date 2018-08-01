@@ -124,9 +124,9 @@ const withChartData = WrappedComponent => props => {
     // Here we sum up all views for a particular day (irrespective of other variable) and
     // calculate the min and max dates.
     for (let i = 0; i < window.mediaItemAnalytics.length; i ++) {
-      const date = new Date(window.mediaItemAnalytics[i]['date']);
+      const date = new Date(window.mediaItemAnalytics[i].date);
       const views = date in summedByDate ? summedByDate[date] : 0;
-      summedByDate[date] = views + window.mediaItemAnalytics[i]['views'];
+      summedByDate[date] = views + window.mediaItemAnalytics[i].views;
       minDate = Math.min(minDate, date);
       maxDate = Math.max(maxDate, date);
     }
@@ -136,13 +136,13 @@ const withChartData = WrappedComponent => props => {
     // Note we also add a zero data-point at either end of the data which makes the graph
     // look better in case of a single data-point.
     maxDate = addDays(new Date(maxDate), 1);
-    let date = addDays(new Date(minDate), -1);
+    let currentDate = addDays(new Date(minDate), -1);
 
-    while (date <= maxDate) {
+    while (currentDate <= maxDate) {
       chartData.push(
-        [date, date in summedByDate ? summedByDate[date] : 0]
+        [currentDate, currentDate in summedByDate ? summedByDate[currentDate] : 0]
       );
-      date = addDays(date, 1);
+      currentDate = addDays(currentDate, 1);
     }
   }
 
