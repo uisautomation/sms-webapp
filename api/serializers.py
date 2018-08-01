@@ -206,5 +206,11 @@ class MediaAnalyticsSerializer(serializers.Serializer):
     The number of viewing for a particular media item on a particular day.
 
     """
-    date = serializers.DateField(source='day')
-    views = serializers.IntegerField(source='num_hits')
+    date = serializers.SerializerMethodField(help_text='The day when a media was viewed')
+    views = serializers.SerializerMethodField(help_text='The number of media views on a day')
+
+    def get_date(self, row):
+        return str(row[0])
+
+    def get_views(self, row):
+        return row[1]

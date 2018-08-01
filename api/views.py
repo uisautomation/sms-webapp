@@ -4,7 +4,6 @@ Views implementing the API endpoints.
 """
 import copy
 import logging
-from collections import namedtuple
 
 from django.conf import settings
 from django.db import connection
@@ -180,10 +179,6 @@ class MediaView(generics.RetrieveAPIView):
         )
 
 
-# simple object for serialization of media_stats_by_day
-MediaStatsByDay = namedtuple('MediaStatsByDay', ('day', 'num_hits'))
-
-
 class MediaAnalyticsView(APIView):
     """
     Endpoint to retrieve the analytics for a single media item.
@@ -209,11 +204,9 @@ class MediaAnalyticsView(APIView):
             "SELECT day, num_hits FROM stats.media_stats_by_day WHERE media_id=%s",
             [media_item.sms.id]
         )
-        analytics = [
-            MediaStatsByDay(day=item[0], num_hits=item[1]) for item in cursor.fetchall()
-        ]
+        data = serializers.MediaAnalyticsSerializer(cursor.fetchall(), many=True).data
         cursor.close()
-        return Response(serializers.MediaAnalyticsSerializer(analytics, many=True).data)
+        return Response(data)
 
 
 def get_cursor():
