@@ -22,7 +22,7 @@ class AnalyticsPage extends Component {
 
     this.state = {
       // The media item response from the API, if any.
-      mediaItemResponse: null,
+      mediaItem: null,
     }
   }
 
@@ -30,13 +30,13 @@ class AnalyticsPage extends Component {
     // As soon as the page mounts, fetch the media item.
     const { match: { params: { pk } } } = this.props;
     mediaGet(pk).then(
-      response => this.setState({ mediaItemResponse: response }),
-      error => this.setState({ mediaItemResponse: null })
+      response => this.setState({ mediaItem: response }),
+      error => this.setState({ mediaItem: null })
     );
   }
 
   render() {
-    const { mediaItemResponse } = this.state;
+    const { mediaItem } = this.state;
     const { chartData, classes, match: { params: { pk } } } = this.props;
 
     return (
@@ -73,7 +73,7 @@ class AnalyticsPage extends Component {
           <Grid container spacing={16}>
             <Grid item xs={12}>
               <Typography variant="headline" component="div">
-                { mediaItemResponse && mediaItemResponse.name }
+                { mediaItem && mediaItem.name }
               </Typography>
             </Grid>
           </Grid>
@@ -88,8 +88,8 @@ class AnalyticsPage extends Component {
               </Button>
             </Grid>
             <Grid item xs={12} sm={6} md={3} lg={2} style={{textAlign: 'right'}}>
-              <Button component='a' variant='outlined' className={ classes.link }
-                href={mediaItemResponse && mediaItemResponse.legacy.statisticsUrl} fullWidth
+              <Button component='a' variant='outlined' className={ classes.link } fullWidth
+                href={mediaItem && mediaItem.links && mediaItem.links.legacyStatisticsUrl}
               >
                 Legacy Statistics
                 <ShowChartIcon className={ classes.rightIcon } />
@@ -101,7 +101,7 @@ class AnalyticsPage extends Component {
     );
   }
 }
-
+//item && item.links && item.links.legacyStatisticsUrl
 AnalyticsPage.propTypes = {
   chartData: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
