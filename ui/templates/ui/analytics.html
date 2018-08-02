@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
+{% load to_json %}
 {% block extrabody %}
 <script>
-  window.mediaItemAnalytics = {% autoescape off %}{{ analytics_json }}{% endautoescape %};
+  window.mediaItemAnalytics = {% autoescape off %}{{ data|to_json }}{% endautoescape %};
 </script>
 {% endblock %}

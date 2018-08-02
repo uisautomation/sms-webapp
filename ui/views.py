@@ -39,4 +39,4 @@ class MediaAnalyticsView(apiviews.MediaAnalyticsView):
 
     def get(self, request, pk):
         response = super().get(request, pk)
-        return Response({'analytics_json': json.dumps(response.data)})
+        return Response({'data': response.data})
