@@ -79,22 +79,14 @@ class AnalyticsPage extends Component {
           </Grid>
           <Grid container justify='space-between' spacing={16}>
             <Grid item xs={12} sm={6} md={3} lg={2}>
-              <Button
-                component='a' variant='outlined' className={ classes.link }
-                href={'/media/' + pk} fullWidth
-              >
-                Media Item
-                <ArrowUpwardIcon className={ classes.rightIcon } />
-              </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3} lg={2} style={{textAlign: 'right'}}>
               <Button component='a' variant='outlined' className={ classes.link } fullWidth
                 href={mediaItem && mediaItem.links && mediaItem.links.legacyStatisticsUrl}
               >
-                Legacy Statistics
+                SMS Statistics
                 <ShowChartIcon className={ classes.rightIcon } />
               </Button>
             </Grid>
+            <Grid item xs={12} sm={6} md={3} lg={2} style={{textAlign: 'right'}}/>
           </Grid>
         </section>
       </Page>
