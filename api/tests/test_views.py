@@ -1,6 +1,5 @@
 import datetime
 from unittest import mock
-from unittest.mock import Mock
 
 from dateutil import parser as dateparser
 from django.contrib.auth import get_user_model
@@ -214,11 +213,9 @@ class MediaAnalyticsViewCase(ViewTestCase):
     def test_success(self, mock_get_cursor):
         """Check that analytics for a media item is returned"""
 
-        cursor = Mock()
-        cursor.fetchall.return_value = [
+        mock_get_cursor.return_value.__enter__.return_value.fetchall.return_value = [
             (datetime.date(2018, 5, 17), 3), (datetime.date(2018, 3, 22), 4)
         ]
-        mock_get_cursor.return_value.__enter__.return_value = cursor
 
         item = self.non_deleted_media.get(id='populated')
 

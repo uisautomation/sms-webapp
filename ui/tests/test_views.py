@@ -3,7 +3,6 @@ Tests for views.
 
 """
 from unittest import mock
-from unittest.mock import Mock
 
 from django.urls import reverse
 
@@ -50,9 +49,7 @@ class MediaAnalyticsViewTestCase(ViewTestCase):
     def test_success(self, mock_get_cursor):
         """checks that a media item's analytics are rendered successfully"""
 
-        cursor = Mock()
-        cursor.fetchall.return_value = []
-        mock_get_cursor.return_value.__enter__.return_value = cursor
+        mock_get_cursor.return_value.__enter__.return_value.fetchall.return_value = []
 
         item = self.non_deleted_media.get(id='populated')
 
