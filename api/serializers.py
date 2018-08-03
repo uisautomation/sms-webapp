@@ -173,7 +173,7 @@ class ProfileSerializer(serializers.Serializer):
     urls = serializers.DictField()
 
 
-class MediaAnalyticsSerializer(serializers.Serializer):
+class MediaAnalyticsItemSerializer(serializers.Serializer):
     """
     The number of viewing for a particular media item on a particular day.
 
@@ -186,3 +186,11 @@ class MediaAnalyticsSerializer(serializers.Serializer):
 
     def get_views(self, row):
         return row[1]
+
+
+class MediaAnalyticsListSerializer(serializers.Serializer):
+    """
+    A list of media analytics data points.
+
+    """
+    results = MediaAnalyticsItemSerializer(many=True, source='*')

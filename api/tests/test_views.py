@@ -227,10 +227,12 @@ class MediaAnalyticsViewCase(ViewTestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.data[0]['date'], '2018-05-17')
-        self.assertEqual(response.data[0]['views'], 3)
-        self.assertEqual(response.data[1]['date'], '2018-03-22')
-        self.assertEqual(response.data[1]['views'], 4)
+        results = response.data['results']
+
+        self.assertEqual(results[0]['date'], '2018-05-17')
+        self.assertEqual(results[0]['views'], 3)
+        self.assertEqual(results[1]['date'], '2018-03-22')
+        self.assertEqual(results[1]['views'], 4)
 
 
 CHANNELS_FIXTURE = [

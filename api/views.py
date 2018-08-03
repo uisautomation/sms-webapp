@@ -210,7 +210,7 @@ class MediaAnalyticsView(APIView):
 
     """
     @swagger_auto_schema(
-        responses={200: serializers.MediaAnalyticsSerializer()}
+        responses={200: serializers.MediaAnalyticsListSerializer()}
     )
     def get(self, request, pk):
         """Handle GET request."""
@@ -226,7 +226,7 @@ class MediaAnalyticsView(APIView):
             "SELECT day, num_hits FROM stats.media_stats_by_day WHERE media_id=%s",
             [media_item.sms.id]
         )
-        data = serializers.MediaAnalyticsSerializer(cursor.fetchall(), many=True).data
+        data = serializers.MediaAnalyticsListSerializer(cursor.fetchall()).data
         cursor.close()
         return Response(data)
 

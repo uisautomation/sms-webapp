@@ -2,9 +2,6 @@
 Views
 
 """
-import json
-
-from rest_framework.response import Response
 import logging
 
 from django.utils.decorators import method_decorator
@@ -34,9 +31,4 @@ class MediaAnalyticsView(apiviews.MediaAnalyticsView):
 
     """
     renderer_classes = [TemplateHTMLRenderer]
-
     template_name = 'ui/analytics.html'
-
-    def get(self, request, pk):
-        response = super().get(request, pk)
-        return Response({'data': response.data})

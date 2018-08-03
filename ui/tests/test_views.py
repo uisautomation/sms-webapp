@@ -2,7 +2,6 @@
 Tests for views.
 
 """
-import json
 from unittest import mock
 from unittest.mock import Mock
 
@@ -62,5 +61,4 @@ class MediaAnalyticsViewTestCase(ViewTestCase):
 
         self.assertEqual(r.status_code, 200)
         self.assertTemplateUsed(r, 'ui/analytics.html')
-        analytics_json = json.loads(r.context['analytics_json'])
-        self.assertEqual(len(analytics_json), 0)
+        self.assertEqual(len(r.context['results']), 0)
