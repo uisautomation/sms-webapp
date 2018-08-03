@@ -234,6 +234,21 @@ class MediaAnalyticsViewCase(ViewTestCase):
         self.assertEqual(results[1]['date'], '2018-03-22')
         self.assertEqual(results[1]['views'], 4)
 
+    def test_no_legacy_sms(self):
+        """
+        Check that no analytics are returned if a media item doesn't have a legacysms.MediaItem
+        """
+        item = self.non_deleted_media.get(id='a')
+
+        # test
+        response = views.MediaAnalyticsView().as_view()(self.get_request, pk=item.id)
+
+        self.assertEqual(response.status_code, 200)
+
+        results = response.data['results']
+
+        self.assertEqual(len(results), 0)
+
 
 CHANNELS_FIXTURE = [
     {
