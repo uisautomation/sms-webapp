@@ -222,21 +222,13 @@ class MediaAnalyticsView(APIView):
         )
         results = []
         if hasattr(media_item, 'sms'):
-            results = self._get_analytics(media_item.sms.id)
+            with get_cursor() as cursor:
+                cursor.execute(
+                    "SELECT day, num_hits FROM stats.media_stats_by_day WHERE media_id=%s",
+                    [media_item.sms.id]
+                )
+                results = cursor.fetchall()
         return Response(serializers.MediaAnalyticsListSerializer(results).data)
-
-    def _get_analytics(self, sms_id):
-        """Retrieves analytics from the legacy stats table using raw SQL """
-        cursor = get_cursor()
-        try:
-            cursor.execute(
-                "SELECT day, num_hits FROM stats.media_stats_by_day WHERE media_id=%s",
-                [sms_id]
-            )
-            analytics = cursor.fetchall()
-        finally:
-            cursor.close()
-        return analytics
 
 
 def get_cursor():  # pragma: no cover

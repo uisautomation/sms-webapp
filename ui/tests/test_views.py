@@ -52,7 +52,7 @@ class MediaAnalyticsViewTestCase(ViewTestCase):
 
         cursor = Mock()
         cursor.fetchall.return_value = []
-        mock_get_cursor.return_value = cursor
+        mock_get_cursor.return_value.__enter__.return_value = cursor
 
         item = self.non_deleted_media.get(id='populated')
 

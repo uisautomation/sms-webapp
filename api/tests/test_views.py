@@ -218,7 +218,7 @@ class MediaAnalyticsViewCase(ViewTestCase):
         cursor.fetchall.return_value = [
             (datetime.date(2018, 5, 17), 3), (datetime.date(2018, 3, 22), 4)
         ]
-        mock_get_cursor.return_value = cursor
+        mock_get_cursor.return_value.__enter__.return_value = cursor
 
         item = self.non_deleted_media.get(id='populated')
 
