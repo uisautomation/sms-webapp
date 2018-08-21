@@ -8,10 +8,14 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import override_settings
 from django.urls import reverse
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 import smsjwplatform.jwplatform as api
 from api.tests import create_stats_table, delete_stats_table
 from api.tests.test_views import ViewTestCase as _ViewTestCase, DELIVERY_VIDEO_FIXTURE
+from testutils.selenium import with_webdrivers, SeleniumTestCase
 
 
 class ViewTestCase(_ViewTestCase):
@@ -83,6 +87,17 @@ class MediaViewTestCase(ViewTestCase):
         self.assertTemplateUsed(r, 'ui/media.html')
         content = r.content.decode('utf8')
         self.assertIn('<script type="application/profile+json">', content)
+
+
+class HomeLiveTestCase(SeleniumTestCase):
+    @with_webdrivers
+    def test_render(self):
+        self.get_reverse('ui:home')
+        import time
+        time.sleep(20)
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, "app"))
+        )
 
 
 class UploadViewTestCase(ViewTestCase):

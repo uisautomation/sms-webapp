@@ -1,0 +1,3 @@
+# Additional requirements for the production container when running the tox test
+# runner
+tox

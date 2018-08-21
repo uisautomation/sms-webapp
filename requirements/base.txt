@@ -36,8 +36,5 @@ pyjwt
 # For an improved ./manage.py shell experience
 ipython
 
-# So that tests may be run within the container
-tox
-
 # Serving
 gunicorn

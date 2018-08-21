@@ -12,19 +12,27 @@ RUN npm install && npm run build
 # Use python alpine image to run webapp proper
 FROM uisautomation/django:2.1-py3.7
 
-# Ensure packages are up to date and install some useful utilities
-RUN apk update && apk add git vim postgresql-dev libffi-dev gcc musl-dev \
-	libxml2-dev libxslt-dev
+ARG tox
 
 # From now on, work in the application directory
 WORKDIR /usr/src/app
 
 # Copy Docker configuration and install any requirements. We install
 # requirements/docker.txt last to allow it to override any versions in
-# requirements/requirements.txt.
+# requirements/requirements.txt. If we're building a container for use by tox,
+# do not remove the development packages after installation, install any
+# additional tox requirements and download the local broswerstack proxy.
 ADD ./requirements/* ./requirements/
-RUN pip install --upgrade --no-cache-dir -r requirements/base.txt && \
-	pip install --upgrade --no-cache-dir -r requirements/docker.txt
+RUN apk --no-cache add git vim postgresql-dev libffi-dev gcc musl-dev \
+	libxml2-dev libxslt-dev && \
+	pip install --upgrade --no-cache-dir -r requirements/base.txt && \
+	pip install --upgrade --no-cache-dir -r requirements/docker.txt && \
+	if [ ! -z "$tox" ]; then \
+		pip install --upgrade --no-cache-dir -r requirements/tox.txt; \
+	fi && \
+	if [ -z "$tox" ]; then \
+		apk del postgresql-dev libffi-dev gcc musl-dev libxml2-dev libxslt-dev; \
+	fi
 
 # Copy the remaining files over
 ADD . .

@@ -9,9 +9,14 @@ services:
     build:
       context: ..
       dockerfile: ./Dockerfile
+      args:
+        tox: 1
     command: ["tox"]
+    expose:
+      - "8000"
     depends_on:
       - "db"
+      - "browserstack"
     # Mount the local directory inside the container as a volume to allow local
     # changes to be reflected without having to re-build the container.
     volumes:
@@ -23,6 +28,15 @@ services:
     env_file:
       - base.env
       - tox.env
+    environment:
+      TESTUTILS_WEBDRIVER_COMMAND_EXECUTOR: ${TESTUTILS_WEBDRIVER_COMMAND_EXECUTOR}
+
+  browserstack:
+    build:
+      context: .
+      dockerfile: browserstack.Dockerfile
+    environment:
+      BROWSERSTACK_ACCESS_KEY: ${BROWSERSTACK_ACCESS_KEY}
 
 volumes:
   # A persistent volume for tox to store its stuff. This allows caching of
