@@ -1,35 +1,83 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
+import { withStyles } from '@material-ui/core/styles';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 
 import AppBar from "../components/AppBar";
 import MotdBanner from "../components/MotdBanner";
-import ProfileButtonContainer from "./ProfileButtonContainer";
+import NavigationPanel from "../components/NavigationPanel";
 import Snackbar from "./Snackbar";
 
 import { withProfile } from "../providers/ProfileProvider";
+
+const ConnectedNavigationPanel = withProfile(NavigationPanel);
 
 /**
  * A top level component that wraps all pages to give then elements common to all page, the ``AppBar``
  * etc.
  */
-const Page = (
-  { defaultSearch, classes, children }
-) => (
+class Page extends React.Component {
+  state = {
+    mobileDrawerOpen: false,
+  };
+
+  handleDrawerToggle = () => {
+    this.setState(state => ({ mobileDrawerOpen: !state.mobileDrawerOpen }));
+  };
+
+  render() {
+    const { defaultSearch, classes, children } = this.props;
+    const { mobileDrawerOpen } = this.state;
+    const drawer = <ConnectedNavigationPanel />;
+
+    return (
       <div className={ classes.page }>
-        <AppBar position="fixed" defaultSearch={defaultSearch}>
+        <AppBar
+          classes={{root: classes.appBar}}
+          position="fixed"
+          defaultSearch={defaultSearch}
+          onMenuClick={ this.handleDrawerToggle }
+        >
           <HiddenIfNoChannels>
             <IconButton color="inherit" component="a" href="/upload">
               <UploadIcon />
             </IconButton>
           </HiddenIfNoChannels>
-          <ProfileButtonContainer
-            className={ classes.rightButton } variant="flat" color="inherit"
-          />
         </AppBar>
+
+        <Hidden mdUp>
+          <Drawer
+            variant="temporary"
+            open={ mobileDrawerOpen }
+            onClose={ this.handleDrawerToggle }
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            { drawer }
+          </Drawer>
+        </Hidden>
+
+        <Hidden smDown implementation="css">
+          <Drawer
+            variant="permanent"
+            open
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            { drawer }
+          </Drawer>
+        </Hidden>
+
+        <div className={classes.appBarSpacer}/>
 
         <div className={classes.body}>
           <MotdBanner />
@@ -38,7 +86,9 @@ const Page = (
 
         <Snackbar/>
       </div>
-);
+    );
+  }
+}
 
 Page.propTypes = {
   /** @ignore */
@@ -49,25 +99,29 @@ Page.propTypes = {
 };
 
 const styles = theme => ({
+  appBar: {
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${theme.dimensions.drawerWidth}px)`,
+    },
+  },
+
+  appBarSpacer: theme.mixins.toolbar,
+
+  drawerPaper: {
+    width: theme.dimensions.drawerWidth,
+  },
+
   page: {
     minHeight: '100vh',
-    paddingTop: theme.spacing.unit * 8,
     width: '100%',
   },
 
   body: {
     margin: [[0, 'auto']],
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
 
-    [theme.breakpoints.up('sm')]: {
-      paddingLeft: theme.spacing.unit * 3,
-      paddingRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up('md')]: {
+      marginLeft: theme.dimensions.drawerWidth,
     },
-  },
-
-  rightButton: {
-    marginRight: -1.5 * theme.spacing.unit,
   },
 });
 
