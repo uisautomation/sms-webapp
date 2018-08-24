@@ -2,6 +2,9 @@
 Interactions with the JWP management API.
 
 """
+from django.conf import settings
+from django.contrib.sites.models import Site
+
 from smsjwplatform import jwplatform as jwp
 
 from . import models
@@ -23,17 +26,30 @@ def _perform_item_update(item):
     # Get a JWPlatform client
     jwp_client = jwp.get_jwplatform_client()
 
+    # Get the configured Django site
+    site = Site.objects.get(id=settings.SITE_ID)
+
     video_resource = {
         'title': item.title,
         # HACK: JWP does not allow a blank description(!)
         'description': item.description if item.description != '' else ' ',
 
-        # We need to populate the SMS fields so that jwpfetch does not overwrite this item
         'custom': {
+            # We need to populate the SMS fields so that jwpfetch does not overwrite this item
             'sms_downloadable': 'downloadable:{}:'.format(item.downloadable),
             'sms_language': 'language:{}:'.format(item.language),
             'sms_copyright': 'copyright:{}:'.format(item.copyright),
             'sms_keywords': 'keywords:{}:'.format('|'.join(item.tags)),
+
+            # Add some mediaplatform metadata so that we can identify the site and media item which
+            # this video corresponds to.
+            'mediaplatform': {
+                'site': {
+                    'name': site.name,
+                    'domain': site.domain,
+                },
+                'mediaItemId': item.id,
+            },
         },
     }
 
