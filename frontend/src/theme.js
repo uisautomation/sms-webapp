@@ -38,7 +38,7 @@ const theme = createMuiTheme({
     },
   },
   dimensions: {
-    drawerWidth: 30 * 8,
+    drawerWidth: 36 * 8,
   },
   overrides: {
     MuiTypography: {
