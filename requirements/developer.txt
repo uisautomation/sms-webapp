@@ -8,6 +8,8 @@ django-debug-toolbar
 
 # Testing
 tox
+selenium
+browserstack-local
 
 # docker compatible debugger
 pudb

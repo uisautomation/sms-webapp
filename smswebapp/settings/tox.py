@@ -11,6 +11,8 @@ import os
 # Import settings from the base settings file
 from .base import *  # noqa: F401, F403
 
+#: Don't run in DEBUG mode under tox
+DEBUG = False
 
 #: The default test runner is changed to one which captures stdout and stderr
 #: when running tests.
@@ -48,3 +50,11 @@ LOGGING = None
 
 #: Do not synchronise items using the JWP API unless tests expect it
 JWP_SYNC_ITEMS = False
+
+#: URL for selenium web driver executor. Blank if we should skip selenium tests.
+TESTUTILS_WEBDRIVER_COMMAND_EXECUTOR = os.environ.get(
+    'TESTUTILS_WEBDRIVER_COMMAND_EXECUTOR', '')
+
+#: Hostname to bind live server test cases to when launching the server
+TESTUTILS_LIVE_SERVER_TEST_CASE_HOST = os.environ.get(
+    'TESTUTILS_LIVE_SERVER_TEST_CASE_HOST', 'tox')
