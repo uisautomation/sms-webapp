@@ -35,11 +35,11 @@ wOq24EIbX5LquL9w+uvnfXw=
 DEBUG = True
 
 INSTALLED_APPS = INSTALLED_APPS + [  # noqa: F405
-    'debug_toolbar',
+#    'debug_toolbar',
 ]
 
 MIDDLEWARE = MIDDLEWARE + [  # noqa: F405
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 STATIC_URL = '/static/'
