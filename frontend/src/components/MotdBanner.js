@@ -20,7 +20,7 @@ const MotdBanner = ({
   <BodySection classes={{ root: classes.root }}>
     <Typography component='div' variant='body1' classes={{ root: classes.message }}>
       <div className={classes.left}>
-        <ReleaseTag style={{marginRight: '0.5ex'}}>alpha</ReleaseTag>
+        <ReleaseTag style={{marginRight: '0.5ex'}}>beta</ReleaseTag>
         {' '}This service is in development.{' '} { /* whitespace coalescing in JSX sux! */ }
         <a className={classes.link} href="/about#help-us">Help us improve it.</a>
       </div>
