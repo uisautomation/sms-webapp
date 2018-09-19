@@ -534,6 +534,20 @@ class PlaylistView(PlaylistMixin, generics.RetrieveUpdateDestroyAPIView):
     """
     serializer_class = serializers.PlaylistDetailSerializer
 
+    def get_queryset(self):
+        return super().get_queryset().select_related('channel')
+
+    def get_object(self):
+        obj = super().get_object()
+
+        # annotate object with media for user
+        obj.media_for_user = filter_media_item_qs_for_user(
+            obj.ordered_media_item_queryset,
+            self.request.user
+        )
+
+        return obj
+
 
 def exception_handler(exc, context):
     """
