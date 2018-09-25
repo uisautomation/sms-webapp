@@ -103,13 +103,6 @@ def filter_playlist_qs_for_user(qs, user):
     return _filter_qs_common(qs, user)
 
 
-def restrict_queryset_for_user(qs, user):
-    """
-    Restricts a passed MediaItem, Playlist or Channel queryset to the ser
-
-    """
-
-
 class MediaItemListSearchFilter(filters.SearchFilter):
     """
     Custom filter based on :py:class:`rest_framework.filters.SearchFilter` specialised to search
