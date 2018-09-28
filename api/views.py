@@ -484,6 +484,9 @@ class ChannelMixin(ChannelListMixin):
     def get_queryset(self):
         return self.add_channel_detail(super().get_queryset())
 
+    def get_queryset(self):
+        return annotate_channel_qs_for_detail(super().get_queryset(), user=self.request.user)
+
 
 class ChannelListFilterSet(df_filters.FilterSet):
     class Meta:
@@ -519,9 +522,6 @@ class ChannelView(ChannelMixin, generics.RetrieveUpdateAPIView):
 
     """
     serializer_class = serializers.ChannelDetailSerializer
-
-    def get_queryset(self):
-        return annotate_channel_qs_for_detail(super().get_queryset(), user=self.request.user)
 
 
 class PlaylistListMixin(ViewMixinBase):
