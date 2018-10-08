@@ -33,18 +33,20 @@ urlpatterns = [
         login_required(TemplateView.as_view(template_name="ui/media_item_new.html")),
         name='media_item_new'
     ),
-    path('media/<pk>/analytics', views.MediaItemAnalyticsView.as_view(),
+    path('media/<slug:pk>/analytics', views.MediaItemAnalyticsView.as_view(),
          name='media_item_analytics'),
-    path('media/<pk>/edit', views.MediaView.as_view(), name='media_item_edit'),
-    path('media/<pk>', views.MediaView.as_view(), name='media_item'),
+    path('media/<slug:pk>/edit', views.MediaView.as_view(), name='media_item_edit'),
+    path('media/<slug:pk>', views.MediaView.as_view(), name='media_item'),
+    path('media/<slug:pk>.rss', views.MediaItemRSSView.as_view(), name='media_item_rss'),
     path('channels/<pk>', views.ChannelView.as_view(), name='channel'),
     path(
         'playlists/new',
         login_required(TemplateView.as_view(template_name="ui/playlist_new.html")),
         name='playlist_new'
     ),
-    path('playlists/<pk>', views.PlaylistView.as_view(), name='playlist'),
-    path('playlists/<pk>/edit', views.PlaylistView.as_view(), name='playlist_edit'),
+    path('playlists/<slug:pk>', views.PlaylistView.as_view(), name='playlist'),
+    path('playlists/<slug:pk>.rss', views.PlaylistRSSView.as_view(), name='playlist_rss'),
+    path('playlists/<slug:pk>/edit', views.PlaylistView.as_view(), name='playlist_edit'),
     path('about', TemplateView.as_view(template_name="ui/about.html"), name='about'),
     path('changelog', TemplateView.as_view(
         template_name="ui/changelog.html", extra_context={'changelog': changelog}
