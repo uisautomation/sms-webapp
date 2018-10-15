@@ -10,15 +10,17 @@ from django.contrib.postgres.search import SearchRank, SearchQuery
 from django.db import models
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
 from django_filters import rest_framework as df_filters
-from drf_yasg import inspectors, openapi
-from rest_framework import generics, pagination, filters, views
+from drf_yasg import inspectors, openapi, utils as yasg_utils
+from rest_framework import generics, filters, views
 from rest_framework.exceptions import ParseError
 import requests
 
 import mediaplatform.models as mpmodels
 from mediaplatform_jwp.api import delivery
 
+from . import pagination as api_pagination
 from . import permissions
 from . import serializers
 
@@ -34,8 +36,9 @@ POSTER_IMAGE_DEFAULT_WIDTH = 720
 POSTER_IMAGE_VALID_EXTENSIONS = ['jpg']
 
 
-class ListPagination(pagination.CursorPagination):
+class ListPagination(api_pagination.ExtendedCursorPagination):
     page_size = 50
+    page_size_query_param = 'page_size'
 
 
 class FullTextSearchFilter(filters.SearchFilter):
@@ -261,6 +264,9 @@ class MediaItemFilter(df_filters.FilterSet):
         return queryset.filter(id__in=value.media_items)
 
 
+@method_decorator(name='get', decorator=yasg_utils.swagger_auto_schema(
+    paginator_inspectors=[api_pagination.ExtendedCursorPaginationInspector]
+))
 class MediaItemListView(MediaItemListMixin, generics.ListCreateAPIView):
     """
     List and search Media items. If no other ordering is specified, results are returned in order
