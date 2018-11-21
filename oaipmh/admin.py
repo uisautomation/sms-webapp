@@ -49,10 +49,10 @@ class RecordAdmin(admin.ModelAdmin):
 @admin.register(models.MatterhornRecord)
 class MatterhornRecordAdmin(admin.ModelAdmin):
     fields = (
-        'title', 'description', 'updated_at', 'created_at'
+        'title', 'description', 'series', 'updated_at', 'created_at'
     )
     readonly_fields = ('updated_at', 'created_at')
-    list_display = ('get_datestamp', 'get_identifier', 'get_title')
+    list_display = ('get_datestamp', 'get_identifier', 'get_title', 'series')
     ordering = ('-record__datestamp', 'title',)
     search_fields = ('record__identifier', 'title', 'description')
 
@@ -76,3 +76,38 @@ class MatterhornRecordAdmin(admin.ModelAdmin):
         return obj.record.identifier
     get_identifier.short_description = 'identifier'
     get_identifier.admin_order_field = 'record__identifier'
+
+
+class MatterhornRecordInline(admin.TabularInline):
+    model = models.MatterhornRecord
+    can_delete = False
+    verbose_name_plural = "Records"
+
+
+@admin.register(models.Series)
+class SeriesAdmin(admin.ModelAdmin):
+    fields = (
+        'identifier', 'repository', 'title', 'playlist',
+        'view_crsids', 'view_lookup_groups', 'view_lookup_insts',
+        'view_is_public', 'view_is_signed_in', 'updated_at', 'created_at'
+    )
+    readonly_fields = ('updated_at', 'created_at')
+    list_display = ('get_identifier', 'get_title', 'updated_at', 'created_at')
+    ordering = ('-updated_at', 'identifier')
+    inlines = (MatterhornRecordInline,)
+    autocomplete_fields = ('playlist', 'repository')
+    search_fields = ('identifier', 'title')
+
+    def get_identifier(self, obj):
+        if obj.identifier == '':
+            return '\N{EM DASH}'
+        return obj.identifier
+    get_identifier.short_description = 'identifier'
+    get_identifier.admin_order_field = 'identifier'
+
+    def get_title(self, obj):
+        if obj.title == '':
+            return '\N{EM DASH}'
+        return obj.title
+    get_title.short_description = 'title'
+    get_title.admin_order_field = 'title'
