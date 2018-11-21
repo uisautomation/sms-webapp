@@ -44,3 +44,35 @@ class RecordAdmin(admin.ModelAdmin):
     # Since we use a deeply related object in the list, make sure we query it from the DB.
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('metadata_format')
+
+
+@admin.register(models.MatterhornRecord)
+class MatterhornRecordAdmin(admin.ModelAdmin):
+    fields = (
+        'title', 'description', 'updated_at', 'created_at'
+    )
+    readonly_fields = ('updated_at', 'created_at')
+    list_display = ('get_datestamp', 'get_identifier', 'get_title')
+    ordering = ('-record__datestamp', 'title',)
+    search_fields = ('record__identifier', 'title', 'description')
+
+    # Since we use a deeply related object in the list, make sure we query it from the DB.
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('record')
+
+    def get_title(self, obj):
+        if obj.title == '':
+            return '\N{EM DASH}'
+        return obj.title
+    get_title.short_description = 'title'
+    get_title.admin_order_field = 'title'
+
+    def get_datestamp(self, obj):
+        return obj.record.datestamp
+    get_datestamp.short_description = 'datestamp'
+    get_datestamp.admin_order_field = 'record__datestamp'
+
+    def get_identifier(self, obj):
+        return obj.record.identifier
+    get_identifier.short_description = 'identifier'
+    get_identifier.admin_order_field = 'record__identifier'
