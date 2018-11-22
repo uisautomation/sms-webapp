@@ -60,3 +60,7 @@ DEBUG_TOOLBAR_CONFIG = {
     # what the host IP is likely to be.
     'SHOW_TOOLBAR_CALLBACK': _show_toolbar,
 }
+
+# For development purposes, we set the default permission for OAI-PMH to test0002 so that
+# permissions can be tested.
+OAIPMH_DEFAULT_PERMISSION_CRSIDS = ['test0002']
