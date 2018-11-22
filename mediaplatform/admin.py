@@ -103,7 +103,7 @@ class MediaItemAdminForm(forms.ModelForm):
 @admin.register(models.MediaItem)
 class MediaItemAdmin(VersionAdmin):
     fields = (
-        'preview', 'channel', 'type', 'title', 'description', 'formatted_duration',
+        'preview', 'channel', 'type', 'title', 'description', 'fetch_url', 'formatted_duration',
         'published_at', 'downloadable', 'tags', 'language', 'copyright', 'created_at',
         'updated_at', 'deleted_at',
     )
@@ -120,7 +120,7 @@ class MediaItemAdmin(VersionAdmin):
     ]
     readonly_fields = (
         'created_at', 'deleted', 'formatted_duration', 'preview', 'type',
-        'updated_at'
+        'updated_at', 'fetch_url'
     )
     form = MediaItemAdminForm
 

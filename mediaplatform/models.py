@@ -358,6 +358,12 @@ class MediaItem(models.Model):
     #: Full text search vector field
     text_search_vector = pgsearch.SearchVectorField()
 
+    #: Fetch URL for video. Can only be set at creation time to have any effect.
+    fetch_url = models.URLField(
+        max_length=2048, blank=True, default='',
+        help_text='If set at creation time, video will be fetched from this URL'
+    )
+
     #: Creation time
     created_at = models.DateTimeField(auto_now_add=True)
 
